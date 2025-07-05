@@ -125,7 +125,7 @@ export default function Home() {
             {/* Quick Stats */}
             <div className="flex gap-3 mb-8">
               <div className="flex items-center gap-2">
-                <div className="w-10 h-10 bg-coral rounded-full flex items-center justify-center">
+                <div className="w-10 h-10 bg-sky-blue rounded-full flex items-center justify-center">
                   <span className="text-white font-semibold text-sm">
                     {stats?.upcomingThisWeek || 0}
                   </span>
@@ -134,7 +134,7 @@ export default function Home() {
               </div>
               
               <div className="flex items-center gap-2">
-                <div className="w-10 h-10 bg-teal rounded-full flex items-center justify-center">
+                <div className="w-10 h-10 bg-sky-blue rounded-full flex items-center justify-center">
                   <span className="text-white font-semibold text-sm">
                     {stats?.upcomingThisMonth || 0}
                   </span>

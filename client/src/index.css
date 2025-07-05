@@ -107,6 +107,10 @@
     background-color: hsl(267, 57%, 65%);
   }
   
+  .bg-sky-blue {
+    background-color: hsl(200, 85%, 65%);
+  }
+  
   .border-coral {
     border-color: hsl(0, 65%, 69%);
   }
