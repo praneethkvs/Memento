@@ -42,6 +42,7 @@ export class MemStorage implements IStorage {
       eventType: insertEvent.eventType,
       eventDate: insertEvent.eventDate,
       monthDay: insertEvent.monthDay,
+      eventYear: insertEvent.eventYear || null,
       hasYear: insertEvent.hasYear,
       relation: insertEvent.relation,
       notes: insertEvent.notes || null,

@@ -9,7 +9,7 @@ import { AddEventModal } from "@/components/add-event-modal";
 import { EditEventModal } from "@/components/edit-event-modal";
 import { DeleteConfirmationModal } from "@/components/delete-confirmation-modal";
 import { MiniCalendar } from "@/components/mini-calendar";
-import { CalendarHeart, Plus, Search, Upload, Download, CalendarDays, Calendar, List } from "lucide-react";
+import { CalendarHeart, Plus, Search, CalendarDays, Calendar, List } from "lucide-react";
 import { Event } from "@shared/schema";
 
 export default function Home() {
@@ -95,8 +95,8 @@ export default function Home() {
                 <CalendarHeart className="text-white text-xl" />
               </div>
               <div>
-                <h1 className="text-xl font-semibold text-dark-grey">EventKeeper</h1>
-                <p className="text-sm text-gray-600">Personal Event Tracker</p>
+                <h1 className="text-xl font-semibold text-dark-grey">Memento</h1>
+                <p className="text-sm text-gray-600">Remember what matters!</p>
               </div>
             </div>
             <Button
@@ -187,6 +187,7 @@ export default function Home() {
                         <SelectItem value="all">All Types</SelectItem>
                         <SelectItem value="birthday">Birthdays</SelectItem>
                         <SelectItem value="anniversary">Anniversaries</SelectItem>
+                        <SelectItem value="other">Other</SelectItem>
                       </SelectContent>
                     </Select>
                     <Select value={relationFilter} onValueChange={handleRelationFilter}>
@@ -198,6 +199,7 @@ export default function Home() {
                         <SelectItem value="family">Family</SelectItem>
                         <SelectItem value="friend">Friend</SelectItem>
                         <SelectItem value="colleague">Colleague</SelectItem>
+                        <SelectItem value="partner">Partner</SelectItem>
                         <SelectItem value="other">Other</SelectItem>
                       </SelectContent>
                     </Select>
@@ -249,36 +251,7 @@ export default function Home() {
             {/* Calendar Widget */}
             <MiniCalendar events={events} />
 
-            {/* Quick Actions */}
-            <Card className="mt-6">
-              <CardContent className="p-6">
-                <h3 className="font-semibold text-dark-grey mb-4">Quick Actions</h3>
-                <div className="space-y-3">
-                  <Button
-                    onClick={() => setShowAddModal(true)}
-                    variant="ghost"
-                    className="w-full justify-start text-coral hover:bg-coral hover:bg-opacity-10"
-                  >
-                    <Plus className="w-4 h-4 mr-3" />
-                    Add New Event
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    className="w-full justify-start text-teal hover:bg-teal hover:bg-opacity-10"
-                  >
-                    <Upload className="w-4 h-4 mr-3" />
-                    Import Events
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    className="w-full justify-start text-dark-grey hover:bg-gray-100"
-                  >
-                    <Download className="w-4 h-4 mr-3" />
-                    Export Events
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
+
 
             {/* Event Categories */}
             <Card className="mt-6">

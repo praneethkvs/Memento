@@ -42,6 +42,7 @@ export function EditEventModal({ open, onOpenChange, event }: EditEventModalProp
       eventType: 'birthday',
       eventDate: '',
       monthDay: '',
+      eventYear: undefined,
       hasYear: true,
       relation: 'friend',
       notes: '',
@@ -53,8 +54,9 @@ export function EditEventModal({ open, onOpenChange, event }: EditEventModalProp
     if (event) {
       form.reset({
         personName: event.personName,
-        eventType: event.eventType as 'birthday' | 'anniversary',
-        eventDate: formatDateForInput(event.eventDate),
+        eventType: event.eventType as 'birthday' | 'anniversary' | 'other',
+        eventDate: event.monthDay, // Use monthDay for the MM-DD format
+        eventYear: event.eventYear || undefined,
         monthDay: event.monthDay,
         hasYear: event.hasYear,
         relation: event.relation as 'family' | 'friend' | 'colleague' | 'partner' | 'other',
@@ -103,14 +105,19 @@ export function EditEventModal({ open, onOpenChange, event }: EditEventModalProp
       .filter(reminder => reminder.enabled)
       .map(reminder => reminder.days);
     
-    // Parse the date input to extract monthDay and hasYear
-    const dateInfo = parseDateInput(data.eventDate);
+    // Create the month-day format
+    const monthDay = data.eventDate; // This will be MM-DD format
+    const hasYear = data.eventYear !== undefined && data.eventYear !== null;
+    
+    // Create full date - use provided year or current year as placeholder
+    const year = data.eventYear || new Date().getFullYear();
+    const fullDate = `${year}-${monthDay}`;
     
     updateEventMutation.mutate({
       ...data,
-      eventDate: dateInfo.fullDate,
-      monthDay: dateInfo.monthDay,
-      hasYear: dateInfo.hasYear,
+      eventDate: fullDate,
+      monthDay: monthDay,
+      hasYear: hasYear,
       reminders: enabledReminders
     });
   };
@@ -159,7 +166,7 @@ export function EditEventModal({ open, onOpenChange, event }: EditEventModalProp
                     <RadioGroup
                       onValueChange={field.onChange}
                       value={field.value}
-                      className="grid grid-cols-2 gap-3"
+                      className="grid grid-cols-1 gap-3"
                     >
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem value="birthday" id="edit-birthday" />
@@ -175,6 +182,13 @@ export function EditEventModal({ open, onOpenChange, event }: EditEventModalProp
                           <span>Anniversary</span>
                         </Label>
                       </div>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="other" id="edit-other" />
+                        <Label htmlFor="edit-other" className="flex items-center space-x-2 cursor-pointer">
+                          <Calendar className="w-4 h-4 text-gray-600" />
+                          <span>Other</span>
+                        </Label>
+                      </div>
                     </RadioGroup>
                   </FormControl>
                   <FormMessage />
@@ -182,19 +196,51 @@ export function EditEventModal({ open, onOpenChange, event }: EditEventModalProp
               )}
             />
 
-            <FormField
-              control={form.control}
-              name="eventDate"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Event Date</FormLabel>
-                  <FormControl>
-                    <Input type="date" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div className="grid grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="eventDate"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Month & Day</FormLabel>
+                    <FormControl>
+                      <Input 
+                        type="text" 
+                        {...field} 
+                        placeholder="MM-DD"
+                        pattern="[0-9]{2}-[0-9]{2}"
+                      />
+                    </FormControl>
+                    <p className="text-xs text-gray-500 mt-1">
+                      Format: MM-DD (e.g., 01-15)
+                    </p>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="eventYear"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Year (Optional)</FormLabel>
+                    <FormControl>
+                      <Input 
+                        type="number" 
+                        {...field} 
+                        placeholder="YYYY"
+                        min="1900"
+                        max="2100"
+                      />
+                    </FormControl>
+                    <p className="text-xs text-gray-500 mt-1">
+                      Leave empty if unknown
+                    </p>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
 
             <FormField
               control={form.control}

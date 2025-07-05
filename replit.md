@@ -1,8 +1,8 @@
-# Birthday & Anniversary Tracker
+# Memento
 
 ## Overview
 
-This is a full-stack web application for tracking birthdays and anniversaries. It uses a modern tech stack with React frontend, Express.js backend, and PostgreSQL database. The app allows users to create, read, update, and delete events, with features like search, filtering, and reminder notifications.
+This is a full-stack web application for tracking birthdays, anniversaries, and other important events. It uses a modern tech stack with React frontend, Express.js backend, and PostgreSQL database. The app allows users to create, read, update, and delete events, with features like search, filtering, and reminder notifications.
 
 ## System Architecture
 
@@ -25,7 +25,7 @@ This is a full-stack web application for tracking birthdays and anniversaries. I
 The application uses a single `events` table with the following structure:
 - `id`: Primary key (serial)
 - `personName`: Name of the person (required)
-- `eventType`: Either 'birthday' or 'anniversary' (required)
+- `eventType`: Either 'birthday', 'anniversary', or 'other' (required)
 - `eventDate`: Date of the event (required)
 - `relation`: Relationship type - 'family', 'friend', 'colleague', 'partner', or 'other' (required)
 - `notes`: Optional text notes
@@ -105,6 +105,11 @@ The application uses a single `events` table with the following structure:
 ```
 Changelog:
 - July 05, 2025. Initial setup
+- July 05, 2025. Updated app name to "Memento" with tagline "Remember what matters!"
+- July 05, 2025. Added "Other" event type option to support more than just birthdays and anniversaries
+- July 05, 2025. Separated event date into Month & Day (required) and Year (optional) fields
+- July 05, 2025. Added missing "Partner" option to relation filter
+- July 05, 2025. Removed Quick Actions section from sidebar
 ```
 
 ## User Preferences
