@@ -52,13 +52,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const totalEvents = events.length;
       const birthdayCount = events.filter(event => event.eventType === 'birthday').length;
       const anniversaryCount = events.filter(event => event.eventType === 'anniversary').length;
+      const otherCount = events.filter(event => event.eventType === 'other').length;
       
       res.json({
         upcomingThisWeek,
         upcomingThisMonth,
         totalEvents,
         birthdayCount,
-        anniversaryCount
+        anniversaryCount,
+        otherCount
       });
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch statistics" });

@@ -178,7 +178,7 @@ export function AddEventModal({ open, onOpenChange }: AddEventModalProps) {
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem value="other" id="other" />
                         <Label htmlFor="other" className="flex items-center space-x-2 cursor-pointer">
-                          <Calendar className="w-4 h-4 text-gray-600" />
+                          <Calendar className="w-4 h-4 text-purple" />
                           <span>Other</span>
                         </Label>
                       </div>

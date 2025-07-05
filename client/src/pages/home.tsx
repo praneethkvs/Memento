@@ -285,6 +285,15 @@ export default function Home() {
                       {stats?.anniversaryCount || 0}
                     </span>
                   </div>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-3">
+                      <div className="w-3 h-3 bg-purple rounded-full"></div>
+                      <span className="text-sm text-dark-grey">Other</span>
+                    </div>
+                    <span className="text-sm text-gray-500">
+                      {stats?.otherCount || 0}
+                    </span>
+                  </div>
                 </div>
               </CardContent>
             </Card>

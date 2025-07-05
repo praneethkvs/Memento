@@ -83,6 +83,10 @@
     color: hsl(134, 41%, 55%);
   }
   
+  .text-purple {
+    color: hsl(267, 57%, 65%);
+  }
+  
   .bg-coral {
     background-color: hsl(0, 65%, 69%);
   }
@@ -97,6 +101,10 @@
   
   .bg-success {
     background-color: hsl(134, 41%, 55%);
+  }
+  
+  .bg-purple {
+    background-color: hsl(267, 57%, 65%);
   }
   
   .border-coral {

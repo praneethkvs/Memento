@@ -30,7 +30,7 @@ export function EventDetailsModal({ open, onOpenChange, event, onEdit }: EventDe
   const getEventTypeColor = (type: string) => {
     if (type === 'birthday') return 'bg-coral';
     if (type === 'anniversary') return 'bg-teal';
-    return 'bg-blue-500';
+    return 'bg-purple';
   };
 
   const getRelationColor = (relation: string) => {

@@ -57,11 +57,13 @@ export function MiniCalendar({ events, currentDate = new Date() }: MiniCalendarP
                   className={`
                     text-sm py-2 rounded-full w-8 h-8 flex items-center justify-center font-medium
                     ${isCurrentDay 
-                      ? 'bg-coral text-white' 
+                      ? 'bg-gray-800 text-white' 
                       : hasEventOnDay 
                         ? eventType === 'birthday' 
                           ? 'bg-coral text-white' 
-                          : 'bg-teal text-white'
+                          : eventType === 'anniversary'
+                            ? 'bg-teal text-white'
+                            : 'bg-purple text-white'
                         : 'text-dark-grey hover:bg-gray-100'
                     }
                   `}

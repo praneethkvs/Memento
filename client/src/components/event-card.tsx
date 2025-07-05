@@ -19,11 +19,15 @@ interface EventCardProps {
 
 export function EventCard({ event, onEdit, onDelete, onClick }: EventCardProps) {
   const getEventIcon = (type: string) => {
-    return type === 'birthday' ? '🎂' : '💝';
+    if (type === 'birthday') return '🎂';
+    if (type === 'anniversary') return '💝';
+    return '📅';
   };
 
   const getEventTypeColor = (type: string) => {
-    return type === 'birthday' ? 'bg-coral' : 'bg-teal';
+    if (type === 'birthday') return 'bg-coral';
+    if (type === 'anniversary') return 'bg-teal';
+    return 'bg-purple';
   };
 
   const getRelationColor = (relation: string) => {
@@ -90,8 +94,7 @@ export function EventCard({ event, onEdit, onDelete, onClick }: EventCardProps) 
                   {event.relation}
                 </Badge>
               </div>
-              <p className="text-sm text-gray-600 mb-1">{nextOccurrenceDate}</p>
-              <p className="text-sm font-medium text-dark-grey mb-2">{getEventDisplayText()}</p>
+              <p className="text-sm text-gray-600 mb-2">{nextOccurrenceDate}</p>
               <div className="flex items-center space-x-4">
                 <div className="flex items-center space-x-1">
                   <Clock className="w-4 h-4 text-soft-yellow" />
