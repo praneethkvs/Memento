@@ -171,7 +171,7 @@ export function EventDetailsModal({ open, onOpenChange, event, onEdit }: EventDe
                   onEdit(event);
                   onOpenChange(false);
                 }}
-                className="bg-teal text-white hover:bg-teal/90"
+                className="text-white hover:bg-teal/90 bg-[#5abff2e6]"
               >
                 <Edit className="w-4 h-4 mr-2" />
                 Edit Event
