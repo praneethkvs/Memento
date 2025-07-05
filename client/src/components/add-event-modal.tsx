@@ -89,6 +89,8 @@ export function AddEventModal({ open, onOpenChange }: AddEventModalProps) {
   });
 
   const onSubmit = (data: FormData) => {
+    console.log('Form data received:', data);
+    
     const enabledReminders = reminders
       .filter(reminder => reminder.enabled)
       .map(reminder => reminder.days);
@@ -97,6 +99,8 @@ export function AddEventModal({ open, onOpenChange }: AddEventModalProps) {
     const monthDay = data.eventDate; // This will be MM-DD format
     const eventYear = data.eventYear && data.eventYear.trim() !== '' ? parseInt(data.eventYear, 10) : undefined;
     const hasYear = eventYear !== undefined && !isNaN(eventYear);
+    
+    console.log('Parsed eventYear:', eventYear, 'hasYear:', hasYear);
     
     // Create full date - use provided year or current year as placeholder
     const year = eventYear || new Date().getFullYear();
@@ -114,6 +118,7 @@ export function AddEventModal({ open, onOpenChange }: AddEventModalProps) {
       reminders: enabledReminders
     };
     
+    console.log('Submit data:', submitData);
     createEventMutation.mutate(submitData);
   };
 
