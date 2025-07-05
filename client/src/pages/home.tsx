@@ -142,7 +142,7 @@ export default function Home() {
               </div>
               
               <div className="flex items-center gap-2">
-                <div className="w-10 h-10 bg-gray-600 rounded-full flex items-center justify-center">
+                <div className="w-10 h-10 rounded-full flex items-center justify-center bg-[#5abff2]">
                   <span className="text-white font-semibold text-[20px]">
                     {stats?.totalEvents || 0}
                   </span>
