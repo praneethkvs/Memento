@@ -12,6 +12,14 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { insertEventSchema, type InsertEvent, type Event } from "@shared/schema";
+import { z } from "zod";
+
+// Create a form-specific schema that handles eventYear as string
+const formSchema = insertEventSchema.extend({
+  eventYear: z.string().optional()
+});
+
+type FormData = z.infer<typeof formSchema>;
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { formatDateForInput, parseDateInput } from "@/lib/date-utils";
@@ -35,14 +43,14 @@ export function EditEventModal({ open, onOpenChange, event }: EditEventModalProp
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
-  const form = useForm<InsertEvent>({
-    resolver: zodResolver(insertEventSchema),
+  const form = useForm<FormData>({
+    resolver: zodResolver(formSchema),
     defaultValues: {
       personName: '',
       eventType: 'birthday',
       eventDate: '',
       monthDay: '',
-      eventYear: undefined,
+      eventYear: '',
       hasYear: true,
       relation: 'friend',
       notes: '',
@@ -56,7 +64,7 @@ export function EditEventModal({ open, onOpenChange, event }: EditEventModalProp
         personName: event.personName,
         eventType: event.eventType as 'birthday' | 'anniversary' | 'other',
         eventDate: event.monthDay, // Use monthDay for the MM-DD format
-        eventYear: event.eventYear || undefined,
+        eventYear: event.eventYear ? event.eventYear.toString() : '',
         monthDay: event.monthDay,
         hasYear: event.hasYear,
         relation: event.relation as 'family' | 'friend' | 'colleague' | 'partner' | 'other',
@@ -100,26 +108,33 @@ export function EditEventModal({ open, onOpenChange, event }: EditEventModalProp
     }
   });
 
-  const onSubmit = (data: InsertEvent) => {
+  const onSubmit = (data: FormData) => {
     const enabledReminders = reminders
       .filter(reminder => reminder.enabled)
       .map(reminder => reminder.days);
     
     // Create the month-day format
     const monthDay = data.eventDate; // This will be MM-DD format
-    const hasYear = data.eventYear !== undefined && data.eventYear !== null;
+    const eventYear = data.eventYear && data.eventYear.trim() !== '' ? parseInt(data.eventYear, 10) : undefined;
+    const hasYear = eventYear !== undefined && !isNaN(eventYear);
     
     // Create full date - use provided year or current year as placeholder
-    const year = data.eventYear || new Date().getFullYear();
+    const year = eventYear || new Date().getFullYear();
     const fullDate = `${year}-${monthDay}`;
     
-    updateEventMutation.mutate({
-      ...data,
+    const submitData: InsertEvent = {
+      personName: data.personName,
+      eventType: data.eventType,
       eventDate: fullDate,
       monthDay: monthDay,
+      eventYear: eventYear,
       hasYear: hasYear,
+      relation: data.relation,
+      notes: data.notes,
       reminders: enabledReminders
-    });
+    };
+    
+    updateEventMutation.mutate(submitData);
   };
 
   const updateReminder = (index: number, field: 'enabled' | 'days', value: boolean | string) => {

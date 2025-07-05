@@ -30,7 +30,7 @@ export const insertEventSchema = createInsertSchema(events).pick({
   relation: z.enum(['family', 'friend', 'colleague', 'partner', 'other']),
   reminders: z.array(z.string()).optional().default(['30', '15', '7', '3', '1']),
   hasYear: z.boolean().default(true),
-  eventYear: z.number().optional(),
+  eventYear: z.string().optional().transform((val) => val ? parseInt(val, 10) : undefined),
 });
 
 export type InsertEvent = z.infer<typeof insertEventSchema>;

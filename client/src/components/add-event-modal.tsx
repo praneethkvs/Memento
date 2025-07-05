@@ -12,6 +12,14 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { insertEventSchema, type InsertEvent } from "@shared/schema";
+import { z } from "zod";
+
+// Create a form-specific schema that handles eventYear as string
+const formSchema = insertEventSchema.extend({
+  eventYear: z.string().optional()
+});
+
+type FormData = z.infer<typeof formSchema>;
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { parseDateInput } from "@/lib/date-utils";
@@ -34,14 +42,14 @@ export function AddEventModal({ open, onOpenChange }: AddEventModalProps) {
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
-  const form = useForm<InsertEvent>({
-    resolver: zodResolver(insertEventSchema),
+  const form = useForm<FormData>({
+    resolver: zodResolver(formSchema),
     defaultValues: {
       personName: '',
       eventType: 'birthday',
       eventDate: '',
       monthDay: '',
-      eventYear: undefined,
+      eventYear: '',
       hasYear: true,
       relation: 'friend',
       notes: '',
@@ -80,26 +88,33 @@ export function AddEventModal({ open, onOpenChange }: AddEventModalProps) {
     }
   });
 
-  const onSubmit = (data: InsertEvent) => {
+  const onSubmit = (data: FormData) => {
     const enabledReminders = reminders
       .filter(reminder => reminder.enabled)
       .map(reminder => reminder.days);
     
     // Create the month-day format
     const monthDay = data.eventDate; // This will be MM-DD format
-    const hasYear = data.eventYear !== undefined && data.eventYear !== null;
+    const eventYear = data.eventYear && data.eventYear.trim() !== '' ? parseInt(data.eventYear, 10) : undefined;
+    const hasYear = eventYear !== undefined && !isNaN(eventYear);
     
     // Create full date - use provided year or current year as placeholder
-    const year = data.eventYear || new Date().getFullYear();
+    const year = eventYear || new Date().getFullYear();
     const fullDate = `${year}-${monthDay}`;
     
-    createEventMutation.mutate({
-      ...data,
+    const submitData: InsertEvent = {
+      personName: data.personName,
+      eventType: data.eventType,
       eventDate: fullDate,
       monthDay: monthDay,
+      eventYear: eventYear,
       hasYear: hasYear,
+      relation: data.relation,
+      notes: data.notes,
       reminders: enabledReminders
-    });
+    };
+    
+    createEventMutation.mutate(submitData);
   };
 
   const updateReminder = (index: number, field: 'enabled' | 'days', value: boolean | string) => {
