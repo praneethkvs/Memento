@@ -10,7 +10,7 @@ import { EditEventModal } from "@/components/edit-event-modal";
 import { DeleteConfirmationModal } from "@/components/delete-confirmation-modal";
 import { EventDetailsModal } from "@/components/event-details-modal";
 import { MiniCalendar } from "@/components/mini-calendar";
-import { CalendarHeart, Plus, Search, CalendarDays, Calendar, List } from "lucide-react";
+import { CalendarHeart, Plus, Search, CalendarDays, Calendar, List, LogOut } from "lucide-react";
 import { Event } from "@shared/schema";
 import { useAuth } from "@/hooks/useAuth";
 import { isUnauthorizedError } from "@/lib/authUtils";
@@ -138,10 +138,10 @@ export default function Home() {
               <Button
                 onClick={() => window.location.href = '/api/logout'}
                 variant="outline"
-                className="min-h-[44px]"
+                className="min-h-[44px] flex items-center space-x-2"
               >
+                <LogOut className="w-4 h-4" />
                 <span className="hidden sm:inline">Logout</span>
-                <span className="sm:hidden">⚬</span>
               </Button>
             </div>
           </div>
