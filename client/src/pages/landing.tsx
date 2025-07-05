@@ -1,0 +1,96 @@
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { CalendarHeart, Gift, Bell, Users } from "lucide-react";
+
+export default function Landing() {
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        {/* Header */}
+        <div className="text-center mb-16">
+          <div className="flex items-center justify-center mb-8">
+            <div className="w-16 h-16 bg-coral rounded-2xl flex items-center justify-center mr-4">
+              <CalendarHeart className="w-8 h-8 text-white" />
+            </div>
+            <div>
+              <h1 className="text-4xl font-bold text-dark-grey">Memento</h1>
+              <p className="text-lg text-gray-600">Remember what matters!</p>
+            </div>
+          </div>
+          <p className="text-xl text-gray-700 max-w-3xl mx-auto mb-8">
+            Never miss another birthday, anniversary, or special moment. Keep track of all the important dates 
+            in your life with beautiful reminders and personalized notes.
+          </p>
+          <Button
+            onClick={() => window.location.href = '/api/login'}
+            className="bg-sky-blue text-white hover:bg-sky-blue/90 text-lg px-8 py-3 h-auto"
+          >
+            Sign in to Get Started
+          </Button>
+        </div>
+
+        {/* Features */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+          <Card className="hover:shadow-lg transition-shadow">
+            <CardContent className="p-8 text-center">
+              <div className="w-12 h-12 bg-coral bg-opacity-10 rounded-full flex items-center justify-center mx-auto mb-4">
+                <CalendarHeart className="w-6 h-6 text-coral" />
+              </div>
+              <h3 className="text-lg font-semibold text-dark-grey mb-2">Track Special Dates</h3>
+              <p className="text-gray-600">
+                Birthdays, anniversaries, and other important events all in one place.
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card className="hover:shadow-lg transition-shadow">
+            <CardContent className="p-8 text-center">
+              <div className="w-12 h-12 bg-teal bg-opacity-10 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Bell className="w-6 h-6 text-teal" />
+              </div>
+              <h3 className="text-lg font-semibold text-dark-grey mb-2">Smart Reminders</h3>
+              <p className="text-gray-600">
+                Get notified days, weeks, or months before important dates.
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card className="hover:shadow-lg transition-shadow">
+            <CardContent className="p-8 text-center">
+              <div className="w-12 h-12 bg-purple bg-opacity-10 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Gift className="w-6 h-6 text-purple" />
+              </div>
+              <h3 className="text-lg font-semibold text-dark-grey mb-2">Personal Notes</h3>
+              <p className="text-gray-600">
+                Add gift ideas, preferences, and special notes for each person.
+              </p>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Call to Action */}
+        <div className="text-center">
+          <Card className="max-w-2xl mx-auto">
+            <CardContent className="p-12">
+              <Users className="w-16 h-16 text-sky-blue mx-auto mb-6" />
+              <h2 className="text-2xl font-bold text-dark-grey mb-4">
+                Start Building Your Personal Event Collection
+              </h2>
+              <p className="text-gray-600 mb-8">
+                Join thousands of users who never miss a special moment. 
+                Sign in with your Replit account to get started.
+              </p>
+              <Button
+                onClick={() => window.location.href = '/api/login'}
+                size="lg"
+                className="bg-sky-blue text-white hover:bg-sky-blue/90"
+              >
+                Sign In with Replit
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    </div>
+  );
+}

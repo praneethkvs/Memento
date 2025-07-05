@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -12,8 +12,13 @@ import { EventDetailsModal } from "@/components/event-details-modal";
 import { MiniCalendar } from "@/components/mini-calendar";
 import { CalendarHeart, Plus, Search, CalendarDays, Calendar, List } from "lucide-react";
 import { Event } from "@shared/schema";
+import { useAuth } from "@/hooks/useAuth";
+import { isUnauthorizedError } from "@/lib/authUtils";
+import { useToast } from "@/hooks/use-toast";
 
 export default function Home() {
+  const { toast } = useToast();
+  const { isAuthenticated, isLoading: isAuthLoading } = useAuth();
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -26,13 +31,28 @@ export default function Home() {
   const [typeFilter, setTypeFilter] = useState('all');
   const [relationFilter, setRelationFilter] = useState('all');
 
+  // Redirect to login if not authenticated
+  useEffect(() => {
+    if (!isAuthLoading && !isAuthenticated) {
+      toast({
+        title: "Unauthorized",
+        description: "You are logged out. Logging in again...",
+        variant: "destructive",
+      });
+      setTimeout(() => {
+        window.location.href = "/api/login";
+      }, 500);
+      return;
+    }
+  }, [isAuthenticated, isAuthLoading, toast]);
+
   // Build query parameters
   const queryParams = new URLSearchParams();
   if (searchQuery) queryParams.append('search', searchQuery);
   if (typeFilter !== 'all') queryParams.append('type', typeFilter);
   if (relationFilter !== 'all') queryParams.append('relation', relationFilter);
 
-  const { data: events = [], isLoading } = useQuery<Event[]>({
+  const { data: events = [], isLoading: isLoadingEvents } = useQuery<Event[]>({
     queryKey: ['/api/events', queryParams.toString()],
     queryFn: async () => {
       const response = await fetch(`/api/events?${queryParams.toString()}`);
@@ -81,7 +101,7 @@ export default function Home() {
     setRelationFilter(relation);
   };
 
-  if (isLoading) {
+  if (isLoadingEvents) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
@@ -107,13 +127,23 @@ export default function Home() {
                 <p className="text-sm text-gray-600">Remember what matters!</p>
               </div>
             </div>
-            <Button
-              onClick={() => setShowAddModal(true)}
-              className="bg-[#5abff2] text-white hover:bg-[#5abff2]/90 flex items-center space-x-2 min-h-[44px]"
-            >
-              <Plus className="w-4 h-4" />
-              <span className="hidden sm:inline">Add Event</span>
-            </Button>
+            <div className="flex items-center space-x-3">
+              <Button
+                onClick={() => setShowAddModal(true)}
+                className="bg-[#5abff2] text-white hover:bg-[#5abff2]/90 flex items-center space-x-2 min-h-[44px]"
+              >
+                <Plus className="w-4 h-4" />
+                <span className="hidden sm:inline">Add Event</span>
+              </Button>
+              <Button
+                onClick={() => window.location.href = '/api/logout'}
+                variant="outline"
+                className="min-h-[44px]"
+              >
+                <span className="hidden sm:inline">Logout</span>
+                <span className="sm:hidden">⚬</span>
+              </Button>
+            </div>
           </div>
         </div>
       </header>

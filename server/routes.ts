@@ -4,20 +4,36 @@ import { storage } from "./storage";
 import { insertEventSchema } from "@shared/schema";
 import { z } from "zod";
 import { getNextOccurrence } from "./date-utils";
+import { setupAuth, isAuthenticated } from "./replitAuth";
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // Get all events
-  app.get("/api/events", async (req, res) => {
+  // Auth middleware
+  await setupAuth(app);
+
+  // Auth routes
+  app.get('/api/auth/user', isAuthenticated, async (req: any, res) => {
     try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+      res.json(user);
+    } catch (error) {
+      console.error("Error fetching user:", error);
+      res.status(500).json({ message: "Failed to fetch user" });
+    }
+  });
+  // Get all events (protected)
+  app.get("/api/events", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
       const { search, type, relation } = req.query;
       
       let events;
       if (search) {
-        events = await storage.searchEvents(search as string);
+        events = await storage.searchEvents(search as string, userId);
       } else if (type || relation) {
-        events = await storage.filterEvents(type as string, relation as string);
+        events = await storage.filterEvents(type as string, relation as string, userId);
       } else {
-        events = await storage.getAllEvents();
+        events = await storage.getAllEvents(userId);
       }
       
       res.json(events);
@@ -27,10 +43,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Get event statistics
-  app.get("/api/events/stats", async (req, res) => {
+  // Get event statistics (protected)
+  app.get("/api/events/stats", isAuthenticated, async (req: any, res) => {
     try {
-      const events = await storage.getAllEvents();
+      const userId = req.user.claims.sub;
+      const events = await storage.getAllEvents(userId);
       const now = new Date();
       
       const thisWeekEnd = new Date(now);
@@ -67,11 +84,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Get single event
-  app.get("/api/events/:id", async (req, res) => {
+  // Get single event (protected)
+  app.get("/api/events/:id", isAuthenticated, async (req: any, res) => {
     try {
       const id = parseInt(req.params.id);
-      const event = await storage.getEvent(id);
+      const userId = req.user.claims.sub;
+      const event = await storage.getEvent(id, userId);
       
       if (!event) {
         return res.status(404).json({ message: "Event not found" });
@@ -83,11 +101,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Create new event
-  app.post("/api/events", async (req, res) => {
+  // Create new event (protected)
+  app.post("/api/events", isAuthenticated, async (req: any, res) => {
     try {
+      const userId = req.user.claims.sub;
       const validatedData = insertEventSchema.parse(req.body);
-      const event = await storage.createEvent(validatedData);
+      const event = await storage.createEvent(validatedData, userId);
       res.status(201).json(event);
     } catch (error) {
       if (error instanceof z.ZodError) {
@@ -97,12 +116,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Update event
-  app.put("/api/events/:id", async (req, res) => {
+  // Update event (protected)
+  app.put("/api/events/:id", isAuthenticated, async (req: any, res) => {
     try {
       const id = parseInt(req.params.id);
+      const userId = req.user.claims.sub;
       const validatedData = insertEventSchema.partial().parse(req.body);
-      const event = await storage.updateEvent(id, validatedData);
+      const event = await storage.updateEvent(id, validatedData, userId);
       
       if (!event) {
         return res.status(404).json({ message: "Event not found" });
@@ -117,11 +137,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Delete event
-  app.delete("/api/events/:id", async (req, res) => {
+  // Delete event (protected)
+  app.delete("/api/events/:id", isAuthenticated, async (req: any, res) => {
     try {
       const id = parseInt(req.params.id);
-      const success = await storage.deleteEvent(id);
+      const userId = req.user.claims.sub;
+      const success = await storage.deleteEvent(id, userId);
       
       if (!success) {
         return res.status(404).json({ message: "Event not found" });
