@@ -109,7 +109,7 @@ export default function Home() {
             </div>
             <Button
               onClick={() => setShowAddModal(true)}
-              className="bg-coral text-white hover:bg-coral/90 flex items-center space-x-2 min-h-[44px]"
+              className="bg-[#5abff2] text-white hover:bg-[#5abff2]/90 flex items-center space-x-2 min-h-[44px]"
             >
               <Plus className="w-4 h-4" />
               <span className="hidden sm:inline">Add Event</span>
