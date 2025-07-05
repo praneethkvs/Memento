@@ -55,14 +55,14 @@ export function MiniCalendar({ events, currentDate = new Date() }: MiniCalendarP
                 <div
                   key={`day-${format(date, 'yyyy-MM-dd')}`}
                   className={`
-                    text-sm py-2 rounded-full w-8 h-8 flex items-center justify-center
+                    text-sm py-2 rounded-full w-8 h-8 flex items-center justify-center font-medium
                     ${isCurrentDay 
                       ? 'bg-coral text-white' 
                       : hasEventOnDay 
                         ? eventType === 'birthday' 
-                          ? 'bg-coral bg-opacity-10 text-coral' 
-                          : 'bg-teal bg-opacity-10 text-teal'
-                        : 'text-dark-grey'
+                          ? 'bg-coral text-white' 
+                          : 'bg-teal text-white'
+                        : 'text-dark-grey hover:bg-gray-100'
                     }
                   `}
                 >

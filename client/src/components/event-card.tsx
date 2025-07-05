@@ -14,9 +14,10 @@ interface EventCardProps {
   event: Event;
   onEdit: (event: Event) => void;
   onDelete: (id: number) => void;
+  onClick?: (event: Event) => void;
 }
 
-export function EventCard({ event, onEdit, onDelete }: EventCardProps) {
+export function EventCard({ event, onEdit, onDelete, onClick }: EventCardProps) {
   const getEventIcon = (type: string) => {
     return type === 'birthday' ? '🎂' : '💝';
   };
@@ -69,7 +70,10 @@ export function EventCard({ event, onEdit, onDelete }: EventCardProps) {
   };
 
   return (
-    <Card className="hover:shadow-md transition-shadow">
+    <Card 
+      className={`hover:shadow-md transition-shadow ${onClick ? 'cursor-pointer' : ''}`}
+      onClick={onClick ? () => onClick(event) : undefined}
+    >
       <CardContent className="p-6">
         <div className="flex items-start justify-between">
           <div className="flex items-start space-x-4">
@@ -88,9 +92,6 @@ export function EventCard({ event, onEdit, onDelete }: EventCardProps) {
               </div>
               <p className="text-sm text-gray-600 mb-1">{nextOccurrenceDate}</p>
               <p className="text-sm font-medium text-dark-grey mb-2">{getEventDisplayText()}</p>
-              {event.notes && (
-                <p className="text-sm text-gray-500 mb-3">{event.notes}</p>
-              )}
               <div className="flex items-center space-x-4">
                 <div className="flex items-center space-x-1">
                   <Clock className="w-4 h-4 text-soft-yellow" />
@@ -111,7 +112,10 @@ export function EventCard({ event, onEdit, onDelete }: EventCardProps) {
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => onEdit(event)}
+              onClick={(e) => {
+                e.stopPropagation();
+                onEdit(event);
+              }}
               className="text-gray-400 hover:text-teal"
             >
               <Edit className="w-4 h-4" />
@@ -119,7 +123,10 @@ export function EventCard({ event, onEdit, onDelete }: EventCardProps) {
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => onDelete(event.id)}
+              onClick={(e) => {
+                e.stopPropagation();
+                onDelete(event.id);
+              }}
               className="text-gray-400 hover:text-red-500"
             >
               <Trash2 className="w-4 h-4" />

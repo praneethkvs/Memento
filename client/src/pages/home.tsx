@@ -8,6 +8,7 @@ import { EventCard } from "@/components/event-card";
 import { AddEventModal } from "@/components/add-event-modal";
 import { EditEventModal } from "@/components/edit-event-modal";
 import { DeleteConfirmationModal } from "@/components/delete-confirmation-modal";
+import { EventDetailsModal } from "@/components/event-details-modal";
 import { MiniCalendar } from "@/components/mini-calendar";
 import { CalendarHeart, Plus, Search, CalendarDays, Calendar, List } from "lucide-react";
 import { Event } from "@shared/schema";
@@ -16,7 +17,9 @@ export default function Home() {
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [editingEvent, setEditingEvent] = useState<Event | null>(null);
+  const [viewingEvent, setViewingEvent] = useState<Event | null>(null);
   const [deletingEventId, setDeletingEventId] = useState<number | null>(null);
   const [deletingEventName, setDeletingEventName] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
@@ -50,6 +53,11 @@ export default function Home() {
   const handleEdit = (event: Event) => {
     setEditingEvent(event);
     setShowEditModal(true);
+  };
+
+  const handleViewDetails = (event: Event) => {
+    setViewingEvent(event);
+    setShowDetailsModal(true);
   };
 
   const handleDelete = (id: number) => {
@@ -115,50 +123,50 @@ export default function Home() {
           {/* Main Content */}
           <div className="lg:col-span-2">
             {/* Quick Stats */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-              <Card>
-                <CardContent className="p-6">
+            <div className="grid grid-cols-3 gap-4 mb-8">
+              <Card className="hover:shadow-md transition-shadow">
+                <CardContent className="p-4">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm text-gray-600">This Week</p>
-                      <p className="text-2xl font-semibold text-coral">
+                      <p className="text-xs text-gray-600">This Week</p>
+                      <p className="text-xl font-semibold text-coral">
                         {stats?.upcomingThisWeek || 0}
                       </p>
                     </div>
-                    <div className="w-12 h-12 bg-coral bg-opacity-10 rounded-lg flex items-center justify-center">
-                      <CalendarDays className="w-6 h-6 text-coral" />
+                    <div className="w-8 h-8 bg-coral bg-opacity-10 rounded-lg flex items-center justify-center">
+                      <CalendarDays className="w-4 h-4 text-coral" />
                     </div>
                   </div>
                 </CardContent>
               </Card>
               
-              <Card>
-                <CardContent className="p-6">
+              <Card className="hover:shadow-md transition-shadow">
+                <CardContent className="p-4">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm text-gray-600">This Month</p>
-                      <p className="text-2xl font-semibold text-teal">
+                      <p className="text-xs text-gray-600">This Month</p>
+                      <p className="text-xl font-semibold text-teal">
                         {stats?.upcomingThisMonth || 0}
                       </p>
                     </div>
-                    <div className="w-12 h-12 bg-teal bg-opacity-10 rounded-lg flex items-center justify-center">
-                      <Calendar className="w-6 h-6 text-teal" />
+                    <div className="w-8 h-8 bg-teal bg-opacity-10 rounded-lg flex items-center justify-center">
+                      <Calendar className="w-4 h-4 text-teal" />
                     </div>
                   </div>
                 </CardContent>
               </Card>
               
-              <Card>
-                <CardContent className="p-6">
+              <Card className="hover:shadow-md transition-shadow">
+                <CardContent className="p-4">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm text-gray-600">Total Events</p>
-                      <p className="text-2xl font-semibold text-dark-grey">
+                      <p className="text-xs text-gray-600">Total Events</p>
+                      <p className="text-xl font-semibold text-dark-grey">
                         {stats?.totalEvents || 0}
                       </p>
                     </div>
-                    <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
-                      <List className="w-6 h-6 text-dark-grey" />
+                    <div className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center">
+                      <List className="w-4 h-4 text-dark-grey" />
                     </div>
                   </div>
                 </CardContent>
@@ -240,6 +248,7 @@ export default function Home() {
                     event={event}
                     onEdit={handleEdit}
                     onDelete={handleDelete}
+                    onClick={handleViewDetails}
                   />
                 ))
               )}
@@ -300,6 +309,13 @@ export default function Home() {
         onOpenChange={setShowDeleteModal}
         eventId={deletingEventId}
         eventName={deletingEventName}
+      />
+      
+      <EventDetailsModal
+        open={showDetailsModal}
+        onOpenChange={setShowDetailsModal}
+        event={viewingEvent}
+        onEdit={handleEdit}
       />
     </div>
   );
