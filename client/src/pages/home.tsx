@@ -99,7 +99,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-coral rounded-xl flex items-center justify-center">
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-[#5abff2]">
                 <CalendarHeart className="text-white text-xl" />
               </div>
               <div>
@@ -117,7 +117,6 @@ export default function Home() {
           </div>
         </div>
       </header>
-
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Main Content */}
@@ -279,26 +278,22 @@ export default function Home() {
           </div>
         </div>
       </main>
-
       {/* Modals */}
       <AddEventModal
         open={showAddModal}
         onOpenChange={setShowAddModal}
       />
-      
       <EditEventModal
         open={showEditModal}
         onOpenChange={setShowEditModal}
         event={editingEvent}
       />
-      
       <DeleteConfirmationModal
         open={showDeleteModal}
         onOpenChange={setShowDeleteModal}
         eventId={deletingEventId}
         eventName={deletingEventName}
       />
-      
       <EventDetailsModal
         open={showDetailsModal}
         onOpenChange={setShowDetailsModal}
