@@ -68,28 +68,7 @@ export default function Landing() {
           </Card>
         </div>
 
-        {/* Call to Action */}
-        <div className="text-center">
-          <Card className="max-w-2xl mx-auto">
-            <CardContent className="p-12">
-              <Users className="w-16 h-16 text-sky-blue mx-auto mb-6" />
-              <h2 className="text-2xl font-bold text-dark-grey mb-4">
-                Start Building Your Personal Event Collection
-              </h2>
-              <p className="text-gray-600 mb-8">
-                Join thousands of users who never miss a special moment. 
-                Sign in with your Replit account to get started.
-              </p>
-              <Button
-                onClick={() => window.location.href = '/api/login'}
-                size="lg"
-                className="text-white hover:bg-sky-blue/90 bg-[#5abff2e6]"
-              >
-                Sign In with Replit
-              </Button>
-            </CardContent>
-          </Card>
-        </div>
+        
       </div>
     </div>
   );
