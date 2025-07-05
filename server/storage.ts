@@ -25,18 +25,26 @@ export class MemStorage implements IStorage {
 
   async getAllEvents(): Promise<Event[]> {
     return Array.from(this.events.values()).sort((a, b) => {
-      const dateA = new Date(a.eventDate);
-      const dateB = new Date(b.eventDate);
-      return dateA.getTime() - dateB.getTime();
+      // Import date utils dynamically to avoid circular imports
+      const { getNextOccurrence } = require('../server/date-utils');
+      const nextA = getNextOccurrence(a.monthDay);
+      const nextB = getNextOccurrence(b.monthDay);
+      return nextA.getTime() - nextB.getTime();
     });
   }
 
   async createEvent(insertEvent: InsertEvent): Promise<Event> {
     const id = this.currentId++;
     const event: Event = { 
-      ...insertEvent, 
       id,
-      reminders: insertEvent.reminders || []
+      personName: insertEvent.personName,
+      eventType: insertEvent.eventType,
+      eventDate: insertEvent.eventDate,
+      monthDay: insertEvent.monthDay,
+      hasYear: insertEvent.hasYear,
+      relation: insertEvent.relation,
+      notes: insertEvent.notes || null,
+      reminders: insertEvent.reminders || ['30', '15', '7', '3', '1']
     };
     this.events.set(id, event);
     return event;
@@ -46,7 +54,11 @@ export class MemStorage implements IStorage {
     const existingEvent = this.events.get(id);
     if (!existingEvent) return undefined;
 
-    const updatedEvent: Event = { ...existingEvent, ...updateData };
+    const updatedEvent: Event = { 
+      ...existingEvent, 
+      ...updateData,
+      notes: updateData.notes !== undefined ? updateData.notes || null : existingEvent.notes
+    };
     this.events.set(id, updatedEvent);
     return updatedEvent;
   }

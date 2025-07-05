@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { format, startOfMonth, endOfMonth, eachDayOfInterval, isSameDay, isToday, parseISO } from "date-fns";
 import { Event } from "@shared/schema";
+import { getNextOccurrence } from "@/lib/date-utils";
 
 interface MiniCalendarProps {
   events: Event[];
@@ -13,11 +14,17 @@ export function MiniCalendar({ events, currentDate = new Date() }: MiniCalendarP
   const days = eachDayOfInterval({ start: monthStart, end: monthEnd });
 
   const hasEvent = (date: Date) => {
-    return events.some(event => isSameDay(parseISO(event.eventDate), date));
+    return events.some(event => {
+      const nextOccurrence = getNextOccurrence(event.monthDay);
+      return isSameDay(nextOccurrence, date);
+    });
   };
 
   const getEventType = (date: Date) => {
-    const event = events.find(event => isSameDay(parseISO(event.eventDate), date));
+    const event = events.find(event => {
+      const nextOccurrence = getNextOccurrence(event.monthDay);
+      return isSameDay(nextOccurrence, date);
+    });
     return event?.eventType;
   };
 
@@ -31,8 +38,8 @@ export function MiniCalendar({ events, currentDate = new Date() }: MiniCalendarP
       <CardContent className="p-4">
         <div className="space-y-4">
           <div className="grid grid-cols-7 gap-1 text-center">
-            {dayNames.map(day => (
-              <div key={day} className="text-xs text-gray-500 font-medium py-2">
+            {dayNames.map((day, index) => (
+              <div key={`header-${index}`} className="text-xs text-gray-500 font-medium py-2">
                 {day}
               </div>
             ))}
@@ -46,7 +53,7 @@ export function MiniCalendar({ events, currentDate = new Date() }: MiniCalendarP
               
               return (
                 <div
-                  key={index}
+                  key={`day-${format(date, 'yyyy-MM-dd')}`}
                   className={`
                     text-sm py-2 rounded-full w-8 h-8 flex items-center justify-center
                     ${isCurrentDay 

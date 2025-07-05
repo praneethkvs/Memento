@@ -3,6 +3,7 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertEventSchema } from "@shared/schema";
 import { z } from "zod";
+import { getNextOccurrence } from "./date-utils";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Get all events
@@ -22,6 +23,44 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json(events);
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch events" });
+    }
+  });
+
+  // Get event statistics
+  app.get("/api/events/stats", async (req, res) => {
+    try {
+      const events = await storage.getAllEvents();
+      const now = new Date();
+      
+      const thisWeekEnd = new Date(now);
+      thisWeekEnd.setDate(now.getDate() + 7);
+      
+      const thisMonthEnd = new Date(now);
+      thisMonthEnd.setMonth(now.getMonth() + 1);
+      
+      const upcomingThisWeek = events.filter(event => {
+        const nextOccurrence = getNextOccurrence(event.monthDay);
+        return nextOccurrence >= now && nextOccurrence <= thisWeekEnd;
+      }).length;
+      
+      const upcomingThisMonth = events.filter(event => {
+        const nextOccurrence = getNextOccurrence(event.monthDay);
+        return nextOccurrence >= now && nextOccurrence <= thisMonthEnd;
+      }).length;
+      
+      const totalEvents = events.length;
+      const birthdayCount = events.filter(event => event.eventType === 'birthday').length;
+      const anniversaryCount = events.filter(event => event.eventType === 'anniversary').length;
+      
+      res.json({
+        upcomingThisWeek,
+        upcomingThisMonth,
+        totalEvents,
+        birthdayCount,
+        anniversaryCount
+      });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch statistics" });
     }
   });
 
@@ -88,44 +127,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json({ message: "Event deleted successfully" });
     } catch (error) {
       res.status(500).json({ message: "Failed to delete event" });
-    }
-  });
-
-  // Get event statistics
-  app.get("/api/events/stats", async (req, res) => {
-    try {
-      const events = await storage.getAllEvents();
-      const now = new Date();
-      
-      const thisWeekEnd = new Date(now);
-      thisWeekEnd.setDate(now.getDate() + 7);
-      
-      const thisMonthEnd = new Date(now);
-      thisMonthEnd.setMonth(now.getMonth() + 1);
-      
-      const upcomingThisWeek = events.filter(event => {
-        const eventDate = new Date(event.eventDate);
-        return eventDate >= now && eventDate <= thisWeekEnd;
-      }).length;
-      
-      const upcomingThisMonth = events.filter(event => {
-        const eventDate = new Date(event.eventDate);
-        return eventDate >= now && eventDate <= thisMonthEnd;
-      }).length;
-      
-      const totalEvents = events.length;
-      const birthdayCount = events.filter(event => event.eventType === 'birthday').length;
-      const anniversaryCount = events.filter(event => event.eventType === 'anniversary').length;
-      
-      res.json({
-        upcomingThisWeek,
-        upcomingThisMonth,
-        totalEvents,
-        birthdayCount,
-        anniversaryCount
-      });
-    } catch (error) {
-      res.status(500).json({ message: "Failed to fetch statistics" });
     }
   });
 

@@ -14,6 +14,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { insertEventSchema, type InsertEvent } from "@shared/schema";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
+import { parseDateInput } from "@/lib/date-utils";
 import { Calendar, Heart } from "lucide-react";
 
 interface AddEventModalProps {
@@ -23,9 +24,11 @@ interface AddEventModalProps {
 
 export function AddEventModal({ open, onOpenChange }: AddEventModalProps) {
   const [reminders, setReminders] = useState<Array<{enabled: boolean, days: string}>>([
+    { enabled: true, days: '30' },
+    { enabled: true, days: '15' },
     { enabled: true, days: '7' },
-    { enabled: false, days: '3' },
-    { enabled: false, days: '1' }
+    { enabled: true, days: '3' },
+    { enabled: true, days: '1' }
   ]);
   
   const { toast } = useToast();
@@ -37,6 +40,8 @@ export function AddEventModal({ open, onOpenChange }: AddEventModalProps) {
       personName: '',
       eventType: 'birthday',
       eventDate: '',
+      monthDay: '',
+      hasYear: true,
       relation: 'friend',
       notes: '',
       reminders: []
@@ -58,9 +63,11 @@ export function AddEventModal({ open, onOpenChange }: AddEventModalProps) {
       onOpenChange(false);
       form.reset();
       setReminders([
+        { enabled: true, days: '30' },
+        { enabled: true, days: '15' },
         { enabled: true, days: '7' },
-        { enabled: false, days: '3' },
-        { enabled: false, days: '1' }
+        { enabled: true, days: '3' },
+        { enabled: true, days: '1' }
       ]);
     },
     onError: (error: any) => {
@@ -77,8 +84,14 @@ export function AddEventModal({ open, onOpenChange }: AddEventModalProps) {
       .filter(reminder => reminder.enabled)
       .map(reminder => reminder.days);
     
+    // Parse the date input to extract monthDay and hasYear
+    const dateInfo = parseDateInput(data.eventDate);
+    
     createEventMutation.mutate({
       ...data,
+      eventDate: dateInfo.fullDate,
+      monthDay: dateInfo.monthDay,
+      hasYear: dateInfo.hasYear,
       reminders: enabledReminders
     });
   };
@@ -152,8 +165,15 @@ export function AddEventModal({ open, onOpenChange }: AddEventModalProps) {
                 <FormItem>
                   <FormLabel>Event Date</FormLabel>
                   <FormControl>
-                    <Input type="date" {...field} />
+                    <Input 
+                      type="date" 
+                      {...field} 
+                      placeholder="YYYY-MM-DD or MM-DD if year unknown"
+                    />
                   </FormControl>
+                  <p className="text-xs text-gray-500 mt-1">
+                    Enter full date (YYYY-MM-DD) or just month-day (MM-DD) if year is unknown
+                  </p>
                   <FormMessage />
                 </FormItem>
               )}
@@ -195,7 +215,11 @@ export function AddEventModal({ open, onOpenChange }: AddEventModalProps) {
                       placeholder="Add any special notes, gift ideas, or preferences..."
                       className="resize-none"
                       rows={3}
-                      {...field}
+                      onChange={field.onChange}
+                      onBlur={field.onBlur}
+                      name={field.name}
+                      ref={field.ref}
+                      value={field.value || ''}
                     />
                   </FormControl>
                   <FormMessage />
@@ -222,7 +246,7 @@ export function AddEventModal({ open, onOpenChange }: AddEventModalProps) {
                       <SelectItem value="1">1 day before</SelectItem>
                       <SelectItem value="3">3 days before</SelectItem>
                       <SelectItem value="7">1 week before</SelectItem>
-                      <SelectItem value="14">2 weeks before</SelectItem>
+                      <SelectItem value="15">2 weeks before</SelectItem>
                       <SelectItem value="30">1 month before</SelectItem>
                     </SelectContent>
                   </Select>

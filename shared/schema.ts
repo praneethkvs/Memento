@@ -6,23 +6,28 @@ export const events = pgTable("events", {
   id: serial("id").primaryKey(),
   personName: text("person_name").notNull(),
   eventType: text("event_type").notNull(), // 'birthday' or 'anniversary'
-  eventDate: date("event_date").notNull(),
+  eventDate: date("event_date").notNull(), // Full date (YYYY-MM-DD) - can be partial if year unknown
+  monthDay: text("month_day").notNull(), // MM-DD format for yearly reminders
+  hasYear: boolean("has_year").notNull().default(true), // Whether the year is known
   relation: text("relation").notNull(), // 'family', 'friend', 'colleague', 'partner', 'other'
   notes: text("notes"),
-  reminders: text("reminders").array(), // Array of reminder days like ['7', '3', '1']
+  reminders: text("reminders").array(), // Array of reminder days like ['30', '15', '7', '3', '1']
 });
 
 export const insertEventSchema = createInsertSchema(events).pick({
   personName: true,
   eventType: true,
   eventDate: true,
+  monthDay: true,
+  hasYear: true,
   relation: true,
   notes: true,
   reminders: true,
 }).extend({
   eventType: z.enum(['birthday', 'anniversary']),
   relation: z.enum(['family', 'friend', 'colleague', 'partner', 'other']),
-  reminders: z.array(z.string()).optional().default([]),
+  reminders: z.array(z.string()).optional().default(['30', '15', '7', '3', '1']),
+  hasYear: z.boolean().default(true),
 });
 
 export type InsertEvent = z.infer<typeof insertEventSchema>;

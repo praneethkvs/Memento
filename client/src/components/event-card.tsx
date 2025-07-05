@@ -3,7 +3,12 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Edit, Trash2, Calendar, Clock, Bell } from "lucide-react";
 import { Event } from "@shared/schema";
-import { formatEventDate, getRelativeTimeText } from "@/lib/date-utils";
+import { 
+  formatNextOccurrence, 
+  getDaysUntilNextOccurrence, 
+  calculateAge,
+  shouldShowReminder 
+} from "@/lib/date-utils";
 
 interface EventCardProps {
   event: Event;
@@ -30,6 +35,39 @@ export function EventCard({ event, onEdit, onDelete }: EventCardProps) {
     }
   };
 
+  // Calculate dynamic event information
+  const daysUntil = getDaysUntilNextOccurrence(event.monthDay);
+  const age = calculateAge(event.eventDate, event.hasYear);
+  const nextOccurrenceDate = formatNextOccurrence(event.monthDay);
+  const isRemindersActive = shouldShowReminder(event.monthDay, event.reminders || []);
+
+  // Create display text with age/anniversary years
+  const getEventDisplayText = () => {
+    if (daysUntil === 0) {
+      if (event.eventType === 'birthday') {
+        return age ? `🎉 ${event.personName}'s birthday today! (turning ${age})` : `🎉 ${event.personName}'s birthday today!`;
+      } else {
+        return age ? `🎉 ${event.personName}'s ${age}${getOrdinalSuffix(age)} anniversary today!` : `🎉 ${event.personName}'s anniversary today!`;
+      }
+    } else {
+      const dayText = daysUntil === 1 ? 'day' : 'days';
+      if (event.eventType === 'birthday') {
+        return age ? `${event.personName}'s birthday in ${daysUntil} ${dayText} (turning ${age})` : `${event.personName}'s birthday in ${daysUntil} ${dayText}`;
+      } else {
+        return age ? `${event.personName}'s ${age}${getOrdinalSuffix(age)} anniversary in ${daysUntil} ${dayText}` : `${event.personName}'s anniversary in ${daysUntil} ${dayText}`;
+      }
+    }
+  };
+
+  const getOrdinalSuffix = (num: number) => {
+    const j = num % 10;
+    const k = num % 100;
+    if (j === 1 && k !== 11) return 'st';
+    if (j === 2 && k !== 12) return 'nd';
+    if (j === 3 && k !== 13) return 'rd';
+    return 'th';
+  };
+
   return (
     <Card className="hover:shadow-md transition-shadow">
       <CardContent className="p-6">
@@ -48,17 +86,20 @@ export function EventCard({ event, onEdit, onDelete }: EventCardProps) {
                   {event.relation}
                 </Badge>
               </div>
-              <p className="text-sm text-gray-600 mb-1">{formatEventDate(event.eventDate)}</p>
+              <p className="text-sm text-gray-600 mb-1">{nextOccurrenceDate}</p>
+              <p className="text-sm font-medium text-dark-grey mb-2">{getEventDisplayText()}</p>
               {event.notes && (
                 <p className="text-sm text-gray-500 mb-3">{event.notes}</p>
               )}
               <div className="flex items-center space-x-4">
                 <div className="flex items-center space-x-1">
                   <Clock className="w-4 h-4 text-soft-yellow" />
-                  <span className="text-sm text-gray-600">{getRelativeTimeText(event.eventDate)}</span>
+                  <span className="text-sm text-gray-600">
+                    {daysUntil === 0 ? 'Today!' : `${daysUntil} day${daysUntil === 1 ? '' : 's'} away`}
+                  </span>
                 </div>
                 <div className="flex items-center space-x-1">
-                  <Bell className="w-4 h-4 text-teal" />
+                  <Bell className={`w-4 h-4 ${isRemindersActive ? 'text-coral' : 'text-teal'}`} />
                   <span className="text-sm text-gray-600">
                     {event.reminders?.length || 0} reminder{event.reminders?.length === 1 ? '' : 's'} set
                   </span>

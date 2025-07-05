@@ -14,7 +14,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { insertEventSchema, type InsertEvent, type Event } from "@shared/schema";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
-import { formatDateForInput } from "@/lib/date-utils";
+import { formatDateForInput, parseDateInput } from "@/lib/date-utils";
 import { Calendar, Heart } from "lucide-react";
 
 interface EditEventModalProps {
@@ -25,6 +25,8 @@ interface EditEventModalProps {
 
 export function EditEventModal({ open, onOpenChange, event }: EditEventModalProps) {
   const [reminders, setReminders] = useState<Array<{enabled: boolean, days: string}>>([
+    { enabled: false, days: '30' },
+    { enabled: false, days: '15' },
     { enabled: false, days: '7' },
     { enabled: false, days: '3' },
     { enabled: false, days: '1' }
@@ -39,6 +41,8 @@ export function EditEventModal({ open, onOpenChange, event }: EditEventModalProp
       personName: '',
       eventType: 'birthday',
       eventDate: '',
+      monthDay: '',
+      hasYear: true,
       relation: 'friend',
       notes: '',
       reminders: []
@@ -51,6 +55,8 @@ export function EditEventModal({ open, onOpenChange, event }: EditEventModalProp
         personName: event.personName,
         eventType: event.eventType as 'birthday' | 'anniversary',
         eventDate: formatDateForInput(event.eventDate),
+        monthDay: event.monthDay,
+        hasYear: event.hasYear,
         relation: event.relation as 'family' | 'friend' | 'colleague' | 'partner' | 'other',
         notes: event.notes || '',
         reminders: event.reminders || []
@@ -59,6 +65,8 @@ export function EditEventModal({ open, onOpenChange, event }: EditEventModalProp
       // Update reminders state
       const eventReminders = event.reminders || [];
       setReminders([
+        { enabled: eventReminders.includes('30'), days: '30' },
+        { enabled: eventReminders.includes('15'), days: '15' },
         { enabled: eventReminders.includes('7'), days: '7' },
         { enabled: eventReminders.includes('3'), days: '3' },
         { enabled: eventReminders.includes('1'), days: '1' }
@@ -95,8 +103,14 @@ export function EditEventModal({ open, onOpenChange, event }: EditEventModalProp
       .filter(reminder => reminder.enabled)
       .map(reminder => reminder.days);
     
+    // Parse the date input to extract monthDay and hasYear
+    const dateInfo = parseDateInput(data.eventDate);
+    
     updateEventMutation.mutate({
       ...data,
+      eventDate: dateInfo.fullDate,
+      monthDay: dateInfo.monthDay,
+      hasYear: dateInfo.hasYear,
       reminders: enabledReminders
     });
   };
@@ -215,7 +229,11 @@ export function EditEventModal({ open, onOpenChange, event }: EditEventModalProp
                       placeholder="Add any special notes, gift ideas, or preferences..."
                       className="resize-none"
                       rows={3}
-                      {...field}
+                      onChange={field.onChange}
+                      onBlur={field.onBlur}
+                      name={field.name}
+                      ref={field.ref}
+                      value={field.value || ''}
                     />
                   </FormControl>
                   <FormMessage />
@@ -242,7 +260,7 @@ export function EditEventModal({ open, onOpenChange, event }: EditEventModalProp
                       <SelectItem value="1">1 day before</SelectItem>
                       <SelectItem value="3">3 days before</SelectItem>
                       <SelectItem value="7">1 week before</SelectItem>
-                      <SelectItem value="14">2 weeks before</SelectItem>
+                      <SelectItem value="15">2 weeks before</SelectItem>
                       <SelectItem value="30">1 month before</SelectItem>
                     </SelectContent>
                   </Select>
