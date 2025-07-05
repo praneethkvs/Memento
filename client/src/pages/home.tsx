@@ -213,7 +213,7 @@ export default function Home() {
                     </p>
                     <Button
                       onClick={() => setShowAddModal(true)}
-                      className="bg-coral text-white hover:bg-coral/90"
+                      className="bg-[#5abff2] text-white hover:bg-[#5abff2]/90"
                     >
                       <Plus className="w-4 h-4 mr-2" />
                       Add Event
