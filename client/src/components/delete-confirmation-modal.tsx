@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { AlertTriangle } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
@@ -53,17 +53,16 @@ export function DeleteConfirmationModal({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="w-full max-w-sm">
+        <DialogHeader>
+          <DialogTitle>Delete Event</DialogTitle>
+          <DialogDescription>
+            Are you sure you want to delete the event for {eventName}? This action cannot be undone.
+          </DialogDescription>
+        </DialogHeader>
         <div className="p-6">
           <div className="flex items-center justify-center w-12 h-12 bg-red-100 rounded-full mx-auto mb-4">
             <AlertTriangle className="w-6 h-6 text-red-600" />
           </div>
-          <h2 className="text-lg font-semibold text-dark-grey text-center mb-2">
-            Delete Event
-          </h2>
-          <p className="text-gray-600 text-center mb-6">
-            Are you sure you want to delete the event for <strong>{eventName}</strong>? 
-            This action cannot be undone.
-          </p>
           <div className="flex space-x-3">
             <Button
               variant="outline"

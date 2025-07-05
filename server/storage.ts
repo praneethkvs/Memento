@@ -1,4 +1,5 @@
 import { events, type Event, type InsertEvent } from "@shared/schema";
+import { getNextOccurrence } from "./date-utils";
 
 export interface IStorage {
   getEvent(id: number): Promise<Event | undefined>;
@@ -25,8 +26,6 @@ export class MemStorage implements IStorage {
 
   async getAllEvents(): Promise<Event[]> {
     return Array.from(this.events.values()).sort((a, b) => {
-      // Import date utils dynamically to avoid circular imports
-      const { getNextOccurrence } = require('../server/date-utils');
       const nextA = getNextOccurrence(a.monthDay);
       const nextB = getNextOccurrence(b.monthDay);
       return nextA.getTime() - nextB.getTime();
