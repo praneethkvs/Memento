@@ -34,7 +34,7 @@ export default function Landing() {
           <Card className="hover:shadow-lg transition-shadow">
             <CardContent className="p-8 text-center">
               <div className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4 bg-[#5abff2]">
-                <CalendarHeart className="w-6 h-6 text-coral" />
+                <CalendarHeart className="w-6 h-6 text-white" />
               </div>
               <h3 className="text-lg font-semibold text-dark-grey mb-2">Track Special Dates</h3>
               <p className="text-gray-600">
@@ -46,7 +46,7 @@ export default function Landing() {
           <Card className="hover:shadow-lg transition-shadow">
             <CardContent className="p-8 text-center">
               <div className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4 bg-[#5abff2]">
-                <Bell className="w-6 h-6 text-teal" />
+                <Bell className="w-6 h-6 text-white" />
               </div>
               <h3 className="text-lg font-semibold text-dark-grey mb-2">Smart Reminders</h3>
               <p className="text-gray-600">
@@ -58,7 +58,7 @@ export default function Landing() {
           <Card className="hover:shadow-lg transition-shadow">
             <CardContent className="p-8 text-center">
               <div className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4 bg-[#5abff2]">
-                <Gift className="w-6 h-6 text-purple" />
+                <Gift className="w-6 h-6 text-white" />
               </div>
               <h3 className="text-lg font-semibold text-dark-grey mb-2">Personal Notes</h3>
               <p className="text-gray-600">
