@@ -1,5 +1,7 @@
 import { events, type Event, type InsertEvent } from "@shared/schema";
 import { getNextOccurrence } from "./date-utils";
+import { db } from "./db";
+import { eq } from "drizzle-orm";
 
 export interface IStorage {
   getEvent(id: number): Promise<Event | undefined>;
@@ -88,4 +90,74 @@ export class MemStorage implements IStorage {
   }
 }
 
-export const storage = new MemStorage();
+export class DatabaseStorage implements IStorage {
+  async getEvent(id: number): Promise<Event | undefined> {
+    const [event] = await db.select().from(events).where(eq(events.id, id));
+    return event || undefined;
+  }
+
+  async getAllEvents(): Promise<Event[]> {
+    const allEvents = await db.select().from(events);
+    return allEvents.sort((a, b) => {
+      const nextA = getNextOccurrence(a.monthDay);
+      const nextB = getNextOccurrence(b.monthDay);
+      return nextA.getTime() - nextB.getTime();
+    });
+  }
+
+  async createEvent(insertEvent: InsertEvent): Promise<Event> {
+    const [event] = await db
+      .insert(events)
+      .values(insertEvent)
+      .returning();
+    return event;
+  }
+
+  async updateEvent(id: number, updateData: Partial<InsertEvent>): Promise<Event | undefined> {
+    const [updatedEvent] = await db
+      .update(events)
+      .set(updateData)
+      .where(eq(events.id, id))
+      .returning();
+    return updatedEvent || undefined;
+  }
+
+  async deleteEvent(id: number): Promise<boolean> {
+    const result = await db.delete(events).where(eq(events.id, id));
+    return result.rowCount > 0;
+  }
+
+  async searchEvents(query: string): Promise<Event[]> {
+    const allEvents = await db.select().from(events);
+    const filtered = allEvents.filter(event => 
+      event.personName.toLowerCase().includes(query.toLowerCase()) ||
+      event.notes?.toLowerCase().includes(query.toLowerCase())
+    );
+    return filtered.sort((a, b) => {
+      const nextA = getNextOccurrence(a.monthDay);
+      const nextB = getNextOccurrence(b.monthDay);
+      return nextA.getTime() - nextB.getTime();
+    });
+  }
+
+  async filterEvents(type?: string, relation?: string): Promise<Event[]> {
+    const allEvents = await db.select().from(events);
+    const filtered = allEvents.filter(event => {
+      let matches = true;
+      if (type && event.eventType !== type) {
+        matches = false;
+      }
+      if (relation && event.relation !== relation) {
+        matches = false;
+      }
+      return matches;
+    });
+    return filtered.sort((a, b) => {
+      const nextA = getNextOccurrence(a.monthDay);
+      const nextB = getNextOccurrence(b.monthDay);
+      return nextA.getTime() - nextB.getTime();
+    });
+  }
+}
+
+export const storage = new DatabaseStorage();
