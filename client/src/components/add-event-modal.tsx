@@ -32,10 +32,10 @@ interface AddEventModalProps {
 
 export function AddEventModal({ open, onOpenChange }: AddEventModalProps) {
   const [reminders, setReminders] = useState<Array<{enabled: boolean, days: string}>>([
-    { enabled: true, days: '30' },
-    { enabled: true, days: '15' },
-    { enabled: true, days: '7' },
-    { enabled: true, days: '3' },
+    { enabled: false, days: '30' },
+    { enabled: false, days: '15' },
+    { enabled: false, days: '7' },
+    { enabled: false, days: '3' },
     { enabled: true, days: '1' }
   ]);
   
@@ -72,10 +72,10 @@ export function AddEventModal({ open, onOpenChange }: AddEventModalProps) {
       onOpenChange(false);
       form.reset();
       setReminders([
-        { enabled: true, days: '30' },
-        { enabled: true, days: '15' },
-        { enabled: true, days: '7' },
-        { enabled: true, days: '3' },
+        { enabled: false, days: '30' },
+        { enabled: false, days: '15' },
+        { enabled: false, days: '7' },
+        { enabled: false, days: '3' },
         { enabled: true, days: '1' }
       ]);
     },
