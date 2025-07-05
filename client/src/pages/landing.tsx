@@ -23,7 +23,7 @@ export default function Landing() {
           </p>
           <Button
             onClick={() => window.location.href = '/api/login'}
-            className="bg-sky-blue text-white hover:bg-sky-blue/90 text-lg px-8 py-3 h-auto"
+            className="text-white hover:bg-sky-blue/90 text-lg px-8 py-3 h-auto bg-[#5abff2e6]"
           >
             Sign in to Get Started
           </Button>
@@ -83,7 +83,7 @@ export default function Landing() {
               <Button
                 onClick={() => window.location.href = '/api/login'}
                 size="lg"
-                className="bg-sky-blue text-white hover:bg-sky-blue/90"
+                className="text-white hover:bg-sky-blue/90 bg-[#5abff2e6]"
               >
                 Sign In with Replit
               </Button>
