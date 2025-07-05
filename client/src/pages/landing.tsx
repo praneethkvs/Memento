@@ -68,7 +68,12 @@ export default function Landing() {
           </Card>
         </div>
 
-        
+        {/* Footer */}
+        <div className="mt-16 pt-8 border-t border-gray-200 text-center">
+          <p className="text-gray-500 text-sm">
+            Made with ❤️ using Replit
+          </p>
+        </div>
       </div>
     </div>
   );
