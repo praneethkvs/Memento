@@ -100,7 +100,7 @@ export function AddEventModal({ open, onOpenChange }: AddEventModalProps) {
     const eventYear = data.eventYear && data.eventYear.trim() !== '' ? parseInt(data.eventYear, 10) : undefined;
     const hasYear = eventYear !== undefined && !isNaN(eventYear);
     
-    console.log('Parsed eventYear:', eventYear, 'hasYear:', hasYear);
+    console.log('eventYear:', eventYear, 'hasYear:', hasYear);
     
     // Create full date - use provided year or current year as placeholder
     const year = eventYear || new Date().getFullYear();
