@@ -80,12 +80,12 @@ export function EventCard({ event, onEdit, onDelete, onClick }: EventCardProps) 
     >
       <CardContent className="p-6">
         <div className="flex items-start justify-between">
-          <div className="flex items-start space-x-4 flex-1 min-w-0">
+          <div className="flex items-start space-x-4">
             <div className={`w-12 h-12 ${getEventTypeColor(event.eventType)} bg-opacity-10 rounded-full flex items-center justify-center flex-shrink-0`}>
               <span className="text-xl">{getEventIcon(event.eventType)}</span>
             </div>
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center space-x-2 mb-1 flex-wrap">
+            <div className="flex-1">
+              <div className="flex items-center space-x-2 mb-1">
                 <h3 className="font-semibold text-dark-grey">{event.personName}</h3>
                 <Badge variant="secondary" className={`${getEventTypeColor(event.eventType)} text-white`}>
                   {event.eventType}
@@ -95,7 +95,7 @@ export function EventCard({ event, onEdit, onDelete, onClick }: EventCardProps) 
                 </Badge>
               </div>
               <p className="text-sm text-gray-600 mb-2">{nextOccurrenceDate}</p>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="flex items-center justify-between w-full">
                 <div className="flex items-center space-x-1">
                   <Clock className="w-4 h-4 text-soft-yellow" />
                   <span className="text-sm text-gray-600">
@@ -111,7 +111,7 @@ export function EventCard({ event, onEdit, onDelete, onClick }: EventCardProps) 
               </div>
             </div>
           </div>
-          <div className="flex items-center space-x-2 flex-shrink-0">
+          <div className="flex items-center space-x-2">
             <Button
               variant="ghost"
               size="sm"
