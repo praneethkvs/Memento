@@ -123,54 +123,33 @@ export default function Home() {
           {/* Main Content */}
           <div className="lg:col-span-2">
             {/* Quick Stats */}
-            <div className="grid grid-cols-3 gap-4 mb-8">
-              <Card className="hover:shadow-md transition-shadow">
-                <CardContent className="p-4">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-xs text-gray-600">This Week</p>
-                      <p className="text-xl font-semibold text-coral">
-                        {stats?.upcomingThisWeek || 0}
-                      </p>
-                    </div>
-                    <div className="w-8 h-8 bg-coral bg-opacity-10 rounded-lg flex items-center justify-center">
-                      <CalendarDays className="w-4 h-4 text-coral" />
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+            <div className="flex gap-3 mb-8">
+              <div className="flex items-center gap-2">
+                <div className="w-10 h-10 bg-coral rounded-full flex items-center justify-center">
+                  <span className="text-white font-semibold text-sm">
+                    {stats?.upcomingThisWeek || 0}
+                  </span>
+                </div>
+                <span className="text-xs text-gray-600">This Week</span>
+              </div>
               
-              <Card className="hover:shadow-md transition-shadow">
-                <CardContent className="p-4">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-xs text-gray-600">This Month</p>
-                      <p className="text-xl font-semibold text-teal">
-                        {stats?.upcomingThisMonth || 0}
-                      </p>
-                    </div>
-                    <div className="w-8 h-8 bg-teal bg-opacity-10 rounded-lg flex items-center justify-center">
-                      <Calendar className="w-4 h-4 text-teal" />
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+              <div className="flex items-center gap-2">
+                <div className="w-10 h-10 bg-teal rounded-full flex items-center justify-center">
+                  <span className="text-white font-semibold text-sm">
+                    {stats?.upcomingThisMonth || 0}
+                  </span>
+                </div>
+                <span className="text-xs text-gray-600">This Month</span>
+              </div>
               
-              <Card className="hover:shadow-md transition-shadow">
-                <CardContent className="p-4">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-xs text-gray-600">Total Events</p>
-                      <p className="text-xl font-semibold text-dark-grey">
-                        {stats?.totalEvents || 0}
-                      </p>
-                    </div>
-                    <div className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center">
-                      <List className="w-4 h-4 text-dark-grey" />
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+              <div className="flex items-center gap-2">
+                <div className="w-10 h-10 bg-gray-600 rounded-full flex items-center justify-center">
+                  <span className="text-white font-semibold text-sm">
+                    {stats?.totalEvents || 0}
+                  </span>
+                </div>
+                <span className="text-xs text-gray-600">Total Events</span>
+              </div>
             </div>
 
             {/* Search and Filter */}
