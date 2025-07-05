@@ -154,7 +154,7 @@ export default function Home() {
             {/* Quick Stats */}
             <div className="flex gap-3 mb-8">
               <div className="flex items-center gap-2">
-                <div className="w-10 h-10 bg-sky-blue rounded-full flex items-center justify-center">
+                <div className="w-10 h-10 rounded-full flex items-center justify-center bg-[#5abff2e6]">
                   <span className="text-white font-semibold text-[20px]">
                     {stats?.upcomingThisWeek || 0}
                   </span>
