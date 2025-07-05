@@ -9,7 +9,7 @@ export default function Landing() {
         {/* Header */}
         <div className="text-center mb-16">
           <div className="flex items-center justify-center mb-8">
-            <div className="w-16 h-16 bg-coral rounded-2xl flex items-center justify-center mr-4">
+            <div className="w-16 h-16 rounded-2xl flex items-center justify-center mr-4 bg-[#5abff2]">
               <CalendarHeart className="w-8 h-8 text-white" />
             </div>
             <div>
