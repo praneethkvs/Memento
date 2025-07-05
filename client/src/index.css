@@ -1,0 +1,129 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: hsl(0, 0%, 98%);
+  --foreground: hsl(207, 19%, 18%);
+  --muted: hsl(210, 4%, 95%);
+  --muted-foreground: hsl(215, 5%, 45%);
+  --popover: hsl(0, 0%, 100%);
+  --popover-foreground: hsl(207, 19%, 18%);
+  --card: hsl(0, 0%, 100%);
+  --card-foreground: hsl(207, 19%, 18%);
+  --border: hsl(214, 13%, 91%);
+  --input: hsl(214, 13%, 91%);
+  --primary: hsl(0, 65%, 69%);
+  --primary-foreground: hsl(0, 0%, 100%);
+  --secondary: hsl(177, 49%, 60%);
+  --secondary-foreground: hsl(0, 0%, 100%);
+  --accent: hsl(51, 100%, 71%);
+  --accent-foreground: hsl(207, 19%, 18%);
+  --destructive: hsl(0, 62%, 55%);
+  --destructive-foreground: hsl(0, 0%, 100%);
+  --success: hsl(134, 41%, 55%);
+  --success-foreground: hsl(0, 0%, 100%);
+  --ring: hsl(207, 19%, 18%);
+  --radius: 0.75rem;
+}
+
+.dark {
+  --background: hsl(222, 84%, 5%);
+  --foreground: hsl(210, 40%, 98%);
+  --muted: hsl(217, 33%, 17%);
+  --muted-foreground: hsl(215, 20%, 65%);
+  --popover: hsl(222, 84%, 5%);
+  --popover-foreground: hsl(210, 40%, 98%);
+  --card: hsl(222, 84%, 5%);
+  --card-foreground: hsl(210, 40%, 98%);
+  --border: hsl(217, 33%, 17%);
+  --input: hsl(217, 33%, 17%);
+  --primary: hsl(0, 65%, 69%);
+  --primary-foreground: hsl(0, 0%, 100%);
+  --secondary: hsl(177, 49%, 60%);
+  --secondary-foreground: hsl(0, 0%, 100%);
+  --accent: hsl(51, 100%, 71%);
+  --accent-foreground: hsl(207, 19%, 18%);
+  --destructive: hsl(0, 62%, 55%);
+  --destructive-foreground: hsl(0, 0%, 100%);
+  --success: hsl(134, 41%, 55%);
+  --success-foreground: hsl(0, 0%, 100%);
+  --ring: hsl(212, 95%, 83%);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply font-sans antialiased bg-background text-foreground;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  }
+}
+
+@layer utilities {
+  .text-coral {
+    color: hsl(0, 65%, 69%);
+  }
+  
+  .text-teal {
+    color: hsl(177, 49%, 60%);
+  }
+  
+  .text-soft-yellow {
+    color: hsl(51, 100%, 71%);
+  }
+  
+  .text-dark-grey {
+    color: hsl(207, 19%, 18%);
+  }
+  
+  .text-success {
+    color: hsl(134, 41%, 55%);
+  }
+  
+  .bg-coral {
+    background-color: hsl(0, 65%, 69%);
+  }
+  
+  .bg-teal {
+    background-color: hsl(177, 49%, 60%);
+  }
+  
+  .bg-soft-yellow {
+    background-color: hsl(51, 100%, 71%);
+  }
+  
+  .bg-success {
+    background-color: hsl(134, 41%, 55%);
+  }
+  
+  .border-coral {
+    border-color: hsl(0, 65%, 69%);
+  }
+  
+  .border-teal {
+    border-color: hsl(177, 49%, 60%);
+  }
+  
+  .hover\:bg-coral:hover {
+    background-color: hsl(0, 65%, 69%);
+  }
+  
+  .hover\:bg-teal:hover {
+    background-color: hsl(177, 49%, 60%);
+  }
+  
+  .hover\:bg-success:hover {
+    background-color: hsl(134, 41%, 55%);
+  }
+  
+  .focus\:ring-coral:focus {
+    --tw-ring-color: hsl(0, 65%, 69%);
+  }
+  
+  .focus\:ring-teal:focus {
+    --tw-ring-color: hsl(177, 49%, 60%);
+  }
+}

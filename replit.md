@@ -1,0 +1,114 @@
+# Birthday & Anniversary Tracker
+
+## Overview
+
+This is a full-stack web application for tracking birthdays and anniversaries. It uses a modern tech stack with React frontend, Express.js backend, and PostgreSQL database. The app allows users to create, read, update, and delete events, with features like search, filtering, and reminder notifications.
+
+## System Architecture
+
+### Frontend Architecture
+- **Framework**: React 18 with TypeScript
+- **Styling**: Tailwind CSS with shadcn/ui components
+- **State Management**: TanStack Query for server state
+- **Routing**: Wouter for client-side routing
+- **Forms**: React Hook Form with Zod validation
+- **Build Tool**: Vite for development and production builds
+
+### Backend Architecture
+- **Framework**: Express.js with TypeScript
+- **Database**: PostgreSQL with Drizzle ORM
+- **Data Storage**: In-memory storage for development (with database schema ready)
+- **API Design**: RESTful endpoints for CRUD operations
+- **Build Tool**: ESBuild for production bundling
+
+### Database Schema
+The application uses a single `events` table with the following structure:
+- `id`: Primary key (serial)
+- `personName`: Name of the person (required)
+- `eventType`: Either 'birthday' or 'anniversary' (required)
+- `eventDate`: Date of the event (required)
+- `relation`: Relationship type - 'family', 'friend', 'colleague', 'partner', or 'other' (required)
+- `notes`: Optional text notes
+- `reminders`: Array of reminder days (e.g., ['7', '3', '1'])
+
+## Key Components
+
+### Frontend Components
+- **Event Management**: Add, edit, and delete event modals
+- **Event Display**: Card-based event listing with filtering and search
+- **Calendar View**: Mini calendar showing events with visual indicators
+- **UI Components**: Comprehensive shadcn/ui component library
+
+### Backend Components
+- **Storage Layer**: Abstract storage interface with in-memory implementation
+- **API Routes**: RESTful endpoints for events management
+- **Data Validation**: Zod schemas for type-safe data handling
+- **Development Server**: Vite integration for hot reloading
+
+### Data Models
+- **Event**: Core data structure with validation
+- **InsertEvent**: Schema for creating new events
+- **Form Validation**: Client-side validation matching server schema
+
+## Data Flow
+
+1. **Client Requests**: React components make API calls using TanStack Query
+2. **Server Processing**: Express routes handle requests and validate data
+3. **Data Storage**: Storage layer abstracts database operations
+4. **Response Handling**: Client updates UI based on server responses
+5. **State Management**: TanStack Query manages caching and synchronization
+
+## External Dependencies
+
+### Frontend Dependencies
+- **UI Framework**: React, React DOM
+- **Styling**: Tailwind CSS, Radix UI primitives
+- **State Management**: TanStack Query
+- **Forms**: React Hook Form, Hookform Resolvers
+- **Validation**: Zod
+- **Date Handling**: date-fns
+- **Icons**: Lucide React
+- **Utilities**: clsx, class-variance-authority
+
+### Backend Dependencies
+- **Server**: Express.js
+- **Database**: Drizzle ORM, @neondatabase/serverless
+- **Validation**: Zod, drizzle-zod
+- **Session**: connect-pg-simple
+- **Development**: tsx, esbuild
+
+### Development Dependencies
+- **Build Tools**: Vite, ESBuild
+- **TypeScript**: Full TypeScript support
+- **Development**: Replit-specific plugins for enhanced development experience
+
+## Deployment Strategy
+
+### Development Mode
+- Frontend: Vite dev server with HMR
+- Backend: tsx for TypeScript execution
+- Database: In-memory storage for quick development
+
+### Production Build
+- Frontend: Vite builds optimized static assets
+- Backend: ESBuild creates bundled server executable
+- Database: PostgreSQL with Drizzle migrations
+- Deployment: Single command builds both frontend and backend
+
+### Environment Configuration
+- `NODE_ENV`: Controls development vs production behavior
+- `DATABASE_URL`: PostgreSQL connection string
+- `REPL_ID`: Replit-specific environment detection
+
+## Changelog
+
+```
+Changelog:
+- July 05, 2025. Initial setup
+```
+
+## User Preferences
+
+```
+Preferred communication style: Simple, everyday language.
+```
