@@ -321,7 +321,7 @@ export function AddEventModal({ open, onOpenChange }: AddEventModalProps) {
               </Button>
               <Button
                 type="submit"
-                className="flex-1 bg-coral hover:bg-coral/90"
+                className="flex-1 bg-[#5abff2] hover:bg-[#5abff2]/90"
                 disabled={createEventMutation.isPending}
               >
                 {createEventMutation.isPending ? 'Adding...' : 'Add Event'}
