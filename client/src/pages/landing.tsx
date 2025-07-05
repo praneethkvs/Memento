@@ -57,7 +57,7 @@ export default function Landing() {
 
           <Card className="hover:shadow-lg transition-shadow">
             <CardContent className="p-8 text-center">
-              <div className="w-12 h-12 bg-purple bg-opacity-10 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4 bg-[#5abff2]">
                 <Gift className="w-6 h-6 text-purple" />
               </div>
               <h3 className="text-lg font-semibold text-dark-grey mb-2">Personal Notes</h3>
