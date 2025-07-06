@@ -92,6 +92,8 @@ export default function Home() {
       if (!response.ok) throw new Error("Failed to fetch stats");
       return response.json();
     },
+    staleTime: 0, // Always refetch
+    cacheTime: 0, // Don't cache
   });
 
   const handleEdit = (event: Event) => {
