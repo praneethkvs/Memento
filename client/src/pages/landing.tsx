@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { CalendarHeart, Gift, Bell, Users } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { CalendarHeart, Gift, Bell, Users, Sparkles, MessageCircle, Wand2 } from "lucide-react";
 
 export default function Landing() {
   return (
@@ -17,10 +18,16 @@ export default function Landing() {
               <p className="text-lg text-gray-600">Remember what matters!</p>
             </div>
           </div>
-          <p className="text-xl text-gray-700 max-w-3xl mx-auto mb-8">
+          <p className="text-xl text-gray-700 max-w-3xl mx-auto mb-4">
             Never miss another birthday, anniversary, or special moment. Keep track of all the important dates 
-            in your life with beautiful reminders and personalized notes.
+            in your life with smart reminders and AI-powered personalized messages.
           </p>
+          <div className="flex items-center justify-center gap-2 mb-8">
+            <Badge className="bg-gradient-to-r from-purple-500 to-pink-500 text-white border-0 px-4 py-1 text-sm">
+              <Sparkles className="w-4 h-4 mr-2" />
+              NEW: AI Message Generator
+            </Badge>
+          </div>
           <Button
             onClick={() => window.location.href = '/api/login'}
             className="text-white hover:bg-sky-blue/90 text-lg px-8 py-3 h-auto bg-[#5abff2e6]"
@@ -29,8 +36,42 @@ export default function Landing() {
           </Button>
         </div>
 
-        {/* Features */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+        {/* AI Feature Spotlight */}
+        <div className="mb-16">
+          <Card className="bg-gradient-to-br from-purple-50 to-pink-50 border-purple-200 hover:shadow-xl transition-all duration-300">
+            <CardContent className="p-12 text-center">
+              <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 bg-gradient-to-r from-purple-500 to-pink-500">
+                <Sparkles className="w-8 h-8 text-white" />
+              </div>
+              <h2 className="text-2xl font-bold text-dark-grey mb-4">AI-Powered Message Generator</h2>
+              <p className="text-lg text-gray-700 max-w-2xl mx-auto mb-6">
+                Never struggle with what to say again. Our AI creates personalized birthday wishes, 
+                anniversary messages, and special occasion greetings tailored to your relationship and tone preferences.
+              </p>
+              <div className="flex flex-wrap justify-center gap-4 mb-6">
+                <Badge variant="outline" className="bg-white/50">🎂 Birthday Messages</Badge>
+                <Badge variant="outline" className="bg-white/50">💝 Anniversary Wishes</Badge>
+                <Badge variant="outline" className="bg-white/50">🎉 Special Occasions</Badge>
+                <Badge variant="outline" className="bg-white/50">📝 Custom Tone & Length</Badge>
+              </div>
+              <div className="bg-white/70 rounded-lg p-6 max-w-lg mx-auto">
+                <div className="flex items-start gap-3">
+                  <MessageCircle className="w-5 h-5 text-purple-500 mt-1 flex-shrink-0" />
+                  <div className="text-left">
+                    <p className="text-sm font-medium text-gray-800 mb-1">AI Generated Message:</p>
+                    <p className="text-sm text-gray-600 italic">
+                      "Happy birthday Sarah! 🎉 Hope your special day is filled with joy, laughter, 
+                      and all your favorite things. Can't wait to celebrate with you!"
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Core Features */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
           <Card className="hover:shadow-lg transition-shadow">
             <CardContent className="p-8 text-center">
               <div className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4 bg-[#5abff2]">
@@ -38,7 +79,7 @@ export default function Landing() {
               </div>
               <h3 className="text-lg font-semibold text-dark-grey mb-2">Track Special Dates</h3>
               <p className="text-gray-600">
-                Birthdays, anniversaries, and other important events all in one place.
+                Birthdays, anniversaries, and other important events with color-coded urgency indicators.
               </p>
             </CardContent>
           </Card>
@@ -50,7 +91,7 @@ export default function Landing() {
               </div>
               <h3 className="text-lg font-semibold text-dark-grey mb-2">Smart Reminders</h3>
               <p className="text-gray-600">
-                Get notified days, weeks, or months before important dates.
+                Customizable notifications days, weeks, or months before important dates.
               </p>
             </CardContent>
           </Card>
@@ -58,11 +99,11 @@ export default function Landing() {
           <Card className="hover:shadow-lg transition-shadow">
             <CardContent className="p-8 text-center">
               <div className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4 bg-[#5abff2]">
-                <Gift className="w-6 h-6 text-white" />
+                <Users className="w-6 h-6 text-white" />
               </div>
-              <h3 className="text-lg font-semibold text-dark-grey mb-2">Personal Notes</h3>
+              <h3 className="text-lg font-semibold text-dark-grey mb-2">Relationship Management</h3>
               <p className="text-gray-600">
-                Add gift ideas, preferences, and special notes for each person.
+                Organize contacts by family, friends, colleagues, and partners with personal notes.
               </p>
             </CardContent>
           </Card>
