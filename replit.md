@@ -110,6 +110,11 @@ Changelog:
 - July 05, 2025. Separated event date into Month & Day (required) and Year (optional) fields
 - July 05, 2025. Added missing "Partner" option to relation filter
 - July 05, 2025. Removed Quick Actions section from sidebar
+- July 06, 2025. Implemented AI-powered message generation feature using Google Gemini API
+- July 06, 2025. Added message storage and caching in database with event_messages table
+- July 06, 2025. Fixed event card layout with vertically stacked action buttons
+- July 06, 2025. Improved card spacing with separate lines for event details
+- July 06, 2025. Fixed button positioning to be consistently aligned at top-right of cards
 ```
 
 ## User Preferences
