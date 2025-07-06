@@ -93,7 +93,6 @@ export default function Home() {
       return response.json();
     },
     staleTime: 0, // Always refetch
-    cacheTime: 0, // Don't cache
   });
 
   const handleEdit = (event: Event) => {

@@ -121,6 +121,7 @@ Changelog:
 - July 06, 2025. Updated event sorting to prioritize upcoming events (days until next occurrence)
 - July 06, 2025. Implemented timezone-aware client-side sorting for global users
 - July 06, 2025. Fixed statistics bug where today's events weren't counted in "This Week" and "This Month"
+- July 06, 2025. Added urgency-based color coding: red for today, orange for this week, blue for this month
 ```
 
 ## User Preferences

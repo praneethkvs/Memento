@@ -28,6 +28,34 @@ export function EventCard({ event, onEdit, onDelete, onClick }: EventCardProps) 
     return '📅';
   };
 
+  const getUrgencyStyles = (daysUntil: number) => {
+    if (daysUntil === 0) {
+      // Today - bright red border and light red background
+      return {
+        cardClass: "border-red-500 bg-red-50 dark:bg-red-950/20 border-2",
+        badgeClass: "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200"
+      };
+    } else if (daysUntil <= 7) {
+      // This week - orange border and light orange background
+      return {
+        cardClass: "border-orange-400 bg-orange-50 dark:bg-orange-950/20 border-2",
+        badgeClass: "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200"
+      };
+    } else if (daysUntil <= 30) {
+      // This month - blue border and light blue background
+      return {
+        cardClass: "border-blue-400 bg-blue-50 dark:bg-blue-950/20 border-l-4",
+        badgeClass: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
+      };
+    } else {
+      // Normal - default styling
+      return {
+        cardClass: "border-gray-200 dark:border-gray-700",
+        badgeClass: "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200"
+      };
+    }
+  };
+
   const getEventTypeColor = (type: string) => {
     if (type === 'birthday') return 'bg-coral';
     if (type === 'anniversary') return 'bg-teal';
@@ -77,10 +105,13 @@ export function EventCard({ event, onEdit, onDelete, onClick }: EventCardProps) 
     return 'th';
   };
 
+  // Get urgency-based styles
+  const urgencyStyles = getUrgencyStyles(daysUntil);
+
   return (
     <>
       <Card 
-        className={`hover:shadow-md transition-shadow ${onClick ? 'cursor-pointer' : ''} relative`}
+        className={`hover:shadow-md transition-shadow ${onClick ? 'cursor-pointer' : ''} relative ${urgencyStyles.cardClass}`}
         onClick={onClick ? () => onClick(event) : undefined}
       >
         <CardContent className="p-6 pr-16">
@@ -100,11 +131,11 @@ export function EventCard({ event, onEdit, onDelete, onClick }: EventCardProps) 
               </div>
               <p className="text-sm text-gray-600 mb-2">{nextOccurrenceDate}</p>
               <div className="space-y-1">
-                <div className="flex items-center space-x-1">
+                <div className="flex items-center space-x-2">
                   <Clock className="w-4 h-4 text-soft-yellow" />
-                  <span className="text-sm text-gray-600">
+                  <Badge variant="secondary" className={urgencyStyles.badgeClass}>
                     {daysUntil === 0 ? 'Today!' : `${daysUntil} day${daysUntil === 1 ? '' : 's'} away`}
-                  </span>
+                  </Badge>
                 </div>
                 <div className="flex items-center space-x-1">
                   <Bell className={`w-4 h-4 ${isRemindersActive ? 'text-coral' : 'text-teal'}`} />
