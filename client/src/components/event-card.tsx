@@ -115,7 +115,7 @@ export function EventCard({ event, onEdit, onDelete, onClick }: EventCardProps) 
               </div>
             </div>
           </div>
-          <div className="flex items-center space-x-2">
+          <div className="flex flex-col space-y-1 flex-shrink-0">
             <Button
               variant="ghost"
               size="sm"
@@ -123,7 +123,7 @@ export function EventCard({ event, onEdit, onDelete, onClick }: EventCardProps) 
                 e.stopPropagation();
                 setShowMessageModal(true);
               }}
-              className="text-gray-400 hover:text-purple-500"
+              className="text-gray-400 hover:text-purple-500 p-2 h-8 w-8"
               title="Generate Message"
             >
               <Sparkles className="w-4 h-4" />
@@ -135,7 +135,8 @@ export function EventCard({ event, onEdit, onDelete, onClick }: EventCardProps) 
                 e.stopPropagation();
                 onEdit(event);
               }}
-              className="text-gray-400 hover:text-teal"
+              className="text-gray-400 hover:text-teal p-2 h-8 w-8"
+              title="Edit Event"
             >
               <Edit className="w-4 h-4" />
             </Button>
@@ -146,7 +147,8 @@ export function EventCard({ event, onEdit, onDelete, onClick }: EventCardProps) 
                 e.stopPropagation();
                 onDelete(event.id);
               }}
-              className="text-gray-400 hover:text-red-500"
+              className="text-gray-400 hover:text-red-500 p-2 h-8 w-8"
+              title="Delete Event"
             >
               <Trash2 className="w-4 h-4" />
             </Button>
