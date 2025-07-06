@@ -152,7 +152,7 @@ export default function Home() {
           {/* Main Content */}
           <div className="lg:col-span-2">
             {/* Quick Stats */}
-            <div className="flex gap-3 mb-8">
+            <div className="flex gap-3 mb-4">
               <div className="flex items-center gap-2">
                 <div className="w-10 h-10 rounded-full flex items-center justify-center bg-[#5abff2e6]">
                   <span className="text-white font-semibold text-[20px]">
