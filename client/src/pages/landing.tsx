@@ -142,10 +142,7 @@ export default function Landing() {
                   <Gift className="w-5 h-5 text-emerald-500 mt-1 flex-shrink-0" />
                   <div className="text-left">
                     <p className="text-sm font-medium text-gray-800 mb-1">AI Gift Suggestion Preview:</p>
-                    <p className="text-sm text-gray-600 italic">
-                      "Based on Sarah's love for reading and coffee, consider a beautiful book journal 
-                      paired with artisanal coffee beans - perfect for her cozy morning routine!"
-                    </p>
+                    <p className="text-sm text-gray-600 italic">"Based on Sara's love for reading and coffee, consider a beautiful book journal paired with artisanal coffee beans - perfect for her cozy morning routine!"</p>
                   </div>
                 </div>
               </div>
