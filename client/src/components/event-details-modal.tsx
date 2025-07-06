@@ -56,6 +56,8 @@ export function EventDetailsModal({ open, onOpenChange, event, onEdit }: EventDe
     },
     enabled: !!event && open,
     retry: false,
+    refetchOnMount: true, // Always refetch when component mounts
+    staleTime: 0, // Consider data stale immediately to ensure fresh data
   });
 
   const copyToClipboard = async (text: string) => {

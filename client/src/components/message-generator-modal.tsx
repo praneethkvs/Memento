@@ -37,10 +37,7 @@ export function MessageGeneratorModal({ open, onOpenChange, event }: MessageGene
         credentials: "include",
       });
       
-      console.log(`Fetching message for event ${event.id}, status: ${response.status}`);
-      
       if (response.status === 404) {
-        console.log("No message found for this event");
         return null; // No message exists yet
       }
       
@@ -48,9 +45,7 @@ export function MessageGeneratorModal({ open, onOpenChange, event }: MessageGene
         throw new Error(`Failed to fetch message: ${response.status}`);
       }
       
-      const result = await response.json();
-      console.log("Message fetch result:", result);
-      return result;
+      return response.json();
     },
     enabled: !!event && open,
     retry: false, // Don't retry if no message exists (404)
@@ -58,7 +53,6 @@ export function MessageGeneratorModal({ open, onOpenChange, event }: MessageGene
 
   // Update the displayed message when existing message is loaded
   useEffect(() => {
-    console.log("Existing message:", existingMessage);
     if (existingMessage) {
       setGeneratedMessage(existingMessage);
       setTone(existingMessage.tone);
@@ -91,8 +85,8 @@ export function MessageGeneratorModal({ open, onOpenChange, event }: MessageGene
     },
     onSuccess: (data) => {
       setGeneratedMessage(data);
-      // Invalidate the query to refetch the latest message
-      queryClient.invalidateQueries({ queryKey: ["/api/events", event?.id, "message"] });
+      // Invalidate the query to refetch the latest message - use same key format as event details modal
+      queryClient.invalidateQueries({ queryKey: [`/api/events/${event?.id}/message`] });
       toast({
         title: "Message Generated",
         description: "Your personalized message has been created!",
