@@ -123,6 +123,7 @@ Changelog:
 - July 06, 2025. Fixed statistics bug where today's events weren't counted in "This Week" and "This Month"
 - July 06, 2025. Added urgency-based color coding: red for today, orange for this week, blue for this month
 - July 06, 2025. Enhanced landing page with prominent AI message generator showcase and feature highlights
+- July 06, 2025. Added "Upcoming Features" section showcasing planned AI gift suggestion functionality
 ```
 
 ## User Preferences

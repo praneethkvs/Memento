@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { CalendarHeart, Gift, Bell, Users, Sparkles, MessageCircle, Wand2 } from "lucide-react";
+import { CalendarHeart, Gift, Bell, Users, Sparkles, MessageCircle, Wand2, Clock, Lightbulb } from "lucide-react";
 
 export default function Landing() {
   return (
@@ -102,6 +102,53 @@ export default function Landing() {
               <p className="text-gray-600">
                 Organize contacts by family, friends, colleagues, and partners with personal notes.
               </p>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Upcoming Features */}
+        <div className="mb-16">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl font-bold text-dark-grey mb-2">Coming Soon</h2>
+            <p className="text-gray-600 max-w-2xl mx-auto">
+              We're constantly working to make Memento even better. Here's what's coming next:
+            </p>
+          </div>
+          
+          <Card className="bg-gradient-to-br from-emerald-50 to-teal-50 border-emerald-200 hover:shadow-lg transition-all duration-300">
+            <CardContent className="p-10 text-center">
+              <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 bg-gradient-to-r from-emerald-500 to-teal-500">
+                <Lightbulb className="w-8 h-8 text-white" />
+              </div>
+              <div className="flex items-center justify-center gap-2 mb-4">
+                <Badge className="bg-gradient-to-r from-emerald-500 to-teal-500 text-white border-0 px-4 py-1">
+                  <Clock className="w-4 h-4 mr-2" />
+                  Coming Soon
+                </Badge>
+              </div>
+              <h3 className="text-xl font-bold text-dark-grey mb-4">AI-Powered Gift Suggestions</h3>
+              <p className="text-lg text-gray-700 max-w-2xl mx-auto mb-6">
+                Never run out of gift ideas again! Our AI will analyze your relationships, past preferences, 
+                and special occasions to suggest personalized gift ideas that show you really care.
+              </p>
+              <div className="flex flex-wrap justify-center gap-4 mb-6">
+                <Badge variant="outline" className="bg-white/50">🎁 Personalized Recommendations</Badge>
+                <Badge variant="outline" className="bg-white/50">💡 Budget-Friendly Options</Badge>
+                <Badge variant="outline" className="bg-white/50">🛍️ Shopping Links</Badge>
+                <Badge variant="outline" className="bg-white/50">⭐ Trending Ideas</Badge>
+              </div>
+              <div className="bg-white/70 rounded-lg p-6 max-w-lg mx-auto">
+                <div className="flex items-start gap-3">
+                  <Gift className="w-5 h-5 text-emerald-500 mt-1 flex-shrink-0" />
+                  <div className="text-left">
+                    <p className="text-sm font-medium text-gray-800 mb-1">AI Gift Suggestion Preview:</p>
+                    <p className="text-sm text-gray-600 italic">
+                      "Based on Sarah's love for reading and coffee, consider a beautiful book journal 
+                      paired with artisanal coffee beans - perfect for her cozy morning routine!"
+                    </p>
+                  </div>
+                </div>
+              </div>
             </CardContent>
           </Card>
         </div>
