@@ -119,6 +119,7 @@ Changelog:
 - July 06, 2025. Added existing message display in Event Details Modal with copy to clipboard
 - July 06, 2025. Fixed cache synchronization between modals for real-time message updates
 - July 06, 2025. Updated event sorting to prioritize upcoming events (days until next occurrence)
+- July 06, 2025. Implemented timezone-aware client-side sorting for global users
 ```
 
 ## User Preferences

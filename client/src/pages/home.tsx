@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -29,6 +29,7 @@ import { Event } from "@shared/schema";
 import { useAuth } from "@/hooks/useAuth";
 import { isUnauthorizedError } from "@/lib/authUtils";
 import { useToast } from "@/hooks/use-toast";
+import { getDaysUntilNextOccurrence } from "@/lib/date-utils";
 
 export default function Home() {
   const { toast } = useToast();
@@ -66,7 +67,7 @@ export default function Home() {
   if (typeFilter !== "all") queryParams.append("type", typeFilter);
   if (relationFilter !== "all") queryParams.append("relation", relationFilter);
 
-  const { data: events = [], isLoading: isLoadingEvents } = useQuery<Event[]>({
+  const { data: rawEvents = [], isLoading: isLoadingEvents } = useQuery<Event[]>({
     queryKey: ["/api/events", queryParams.toString()],
     queryFn: async () => {
       const response = await fetch(`/api/events?${queryParams.toString()}`);
@@ -74,6 +75,15 @@ export default function Home() {
       return response.json();
     },
   });
+
+  // Sort events by days until next occurrence (client-side, timezone-aware)
+  const events = useMemo(() => {
+    return [...rawEvents].sort((a, b) => {
+      const daysA = getDaysUntilNextOccurrence(a.monthDay);
+      const daysB = getDaysUntilNextOccurrence(b.monthDay);
+      return daysA - daysB;
+    });
+  }, [rawEvents]);
 
   const { data: stats } = useQuery({
     queryKey: ["/api/events/stats"],
