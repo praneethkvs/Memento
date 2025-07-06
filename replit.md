@@ -115,6 +115,10 @@ Changelog:
 - July 06, 2025. Fixed event card layout with vertically stacked action buttons
 - July 06, 2025. Improved card spacing with separate lines for event details
 - July 06, 2025. Fixed button positioning to be consistently aligned at top-right of cards
+- July 06, 2025. Added helpful tooltips to action buttons (Generate Message, Edit, Delete)
+- July 06, 2025. Added existing message display in Event Details Modal with copy to clipboard
+- July 06, 2025. Fixed cache synchronization between modals for real-time message updates
+- July 06, 2025. Updated event sorting to prioritize upcoming events (days until next occurrence)
 ```
 
 ## User Preferences

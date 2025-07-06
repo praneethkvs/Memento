@@ -11,6 +11,7 @@ import {
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, and, like, or } from "drizzle-orm";
+import { getDaysUntilNextOccurrence } from "./date-utils";
 
 // Interface for storage operations
 export interface IStorage {
@@ -69,11 +70,17 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getAllEvents(userId: string): Promise<Event[]> {
-    return await db
+    const allEvents = await db
       .select()
       .from(events)
-      .where(eq(events.userId, userId))
-      .orderBy(events.monthDay);
+      .where(eq(events.userId, userId));
+    
+    // Sort events by days until next occurrence
+    return allEvents.sort((a, b) => {
+      const daysA = getDaysUntilNextOccurrence(a.monthDay);
+      const daysB = getDaysUntilNextOccurrence(b.monthDay);
+      return daysA - daysB;
+    });
   }
 
   async createEvent(insertEvent: InsertEvent, userId: string): Promise<Event> {
@@ -104,7 +111,7 @@ export class DatabaseStorage implements IStorage {
   }
 
   async searchEvents(query: string, userId: string): Promise<Event[]> {
-    return await db
+    const searchResults = await db
       .select()
       .from(events)
       .where(
@@ -115,8 +122,14 @@ export class DatabaseStorage implements IStorage {
             like(events.notes, `%${query}%`)
           )
         )
-      )
-      .orderBy(events.monthDay);
+      );
+    
+    // Sort search results by days until next occurrence
+    return searchResults.sort((a, b) => {
+      const daysA = getDaysUntilNextOccurrence(a.monthDay);
+      const daysB = getDaysUntilNextOccurrence(b.monthDay);
+      return daysA - daysB;
+    });
   }
 
   async filterEvents(type?: string, relation?: string, userId?: string): Promise<Event[]> {
@@ -132,11 +145,17 @@ export class DatabaseStorage implements IStorage {
       conditions.push(eq(events.relation, relation));
     }
 
-    return await db
+    const filteredEvents = await db
       .select()
       .from(events)
-      .where(and(...conditions))
-      .orderBy(events.monthDay);
+      .where(and(...conditions));
+    
+    // Sort filtered results by days until next occurrence
+    return filteredEvents.sort((a, b) => {
+      const daysA = getDaysUntilNextOccurrence(a.monthDay);
+      const daysB = getDaysUntilNextOccurrence(b.monthDay);
+      return daysA - daysB;
+    });
   }
 
   // Message operations

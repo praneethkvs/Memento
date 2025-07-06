@@ -17,6 +17,18 @@ export function getNextOccurrence(monthDay: string): Date {
   return new Date(currentYear + 1, month - 1, day);
 }
 
+export function getDaysUntilNextOccurrence(monthDay: string): number {
+  const nextOccurrence = getNextOccurrence(monthDay);
+  const today = new Date();
+  
+  // Set both dates to start of day for accurate comparison
+  const todayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+  const nextStart = new Date(nextOccurrence.getFullYear(), nextOccurrence.getMonth(), nextOccurrence.getDate());
+  
+  const diffTime = nextStart.getTime() - todayStart.getTime();
+  return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+}
+
 function isSameDay(date1: Date, date2: Date): boolean {
   return date1.getFullYear() === date2.getFullYear() &&
          date1.getMonth() === date2.getMonth() &&
