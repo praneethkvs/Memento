@@ -78,90 +78,89 @@ export function EventCard({ event, onEdit, onDelete, onClick }: EventCardProps) 
 
   return (
     <>
-    <Card 
-      className={`hover:shadow-md transition-shadow ${onClick ? 'cursor-pointer' : ''} relative`}
-      onClick={onClick ? () => onClick(event) : undefined}
-    >
-      <CardContent className="p-6 pr-16">
-        <div className="flex items-start space-x-4">
-          <div className={`w-12 h-12 ${getEventTypeColor(event.eventType)} bg-opacity-10 rounded-full flex items-center justify-center flex-shrink-0`}>
-            <span className="text-xl">{getEventIcon(event.eventType)}</span>
-          </div>
-          <div className="flex-1">
-            <div className="flex items-center space-x-2 mb-1">
-              <h3 className="font-semibold text-dark-grey">{event.personName}</h3>
-              <Badge variant="secondary" className={`${getEventTypeColor(event.eventType)} text-white`}>
-                {event.eventType}
-              </Badge>
-              <Badge variant="outline" className={getRelationColor(event.relation)}>
-                {event.relation}
-              </Badge>
+      <Card 
+        className={`hover:shadow-md transition-shadow ${onClick ? 'cursor-pointer' : ''} relative`}
+        onClick={onClick ? () => onClick(event) : undefined}
+      >
+        <CardContent className="p-6 pr-16">
+          <div className="flex items-start space-x-4 ml-[-11px] mr-[-11px]">
+            <div className={`w-12 h-12 ${getEventTypeColor(event.eventType)} bg-opacity-10 rounded-full flex items-center justify-center flex-shrink-0`}>
+              <span className="text-xl">{getEventIcon(event.eventType)}</span>
             </div>
-            <p className="text-sm text-gray-600 mb-2">{nextOccurrenceDate}</p>
-            <div className="space-y-1">
-              <div className="flex items-center space-x-1">
-                <Clock className="w-4 h-4 text-soft-yellow" />
-                <span className="text-sm text-gray-600">
-                  {daysUntil === 0 ? 'Today!' : `${daysUntil} day${daysUntil === 1 ? '' : 's'} away`}
-                </span>
+            <div className="flex-1">
+              <div className="flex items-center space-x-2 mb-1">
+                <h3 className="font-semibold text-dark-grey">{event.personName}</h3>
+                <Badge variant="secondary" className={`${getEventTypeColor(event.eventType)} text-white`}>
+                  {event.eventType}
+                </Badge>
+                <Badge variant="outline" className={getRelationColor(event.relation)}>
+                  {event.relation}
+                </Badge>
               </div>
-              <div className="flex items-center space-x-1">
-                <Bell className={`w-4 h-4 ${isRemindersActive ? 'text-coral' : 'text-teal'}`} />
-                <span className="text-sm text-gray-600">
-                  {event.reminders?.length || 0} reminder{event.reminders?.length === 1 ? '' : 's'} set
-                </span>
+              <p className="text-sm text-gray-600 mb-2">{nextOccurrenceDate}</p>
+              <div className="space-y-1">
+                <div className="flex items-center space-x-1">
+                  <Clock className="w-4 h-4 text-soft-yellow" />
+                  <span className="text-sm text-gray-600">
+                    {daysUntil === 0 ? 'Today!' : `${daysUntil} day${daysUntil === 1 ? '' : 's'} away`}
+                  </span>
+                </div>
+                <div className="flex items-center space-x-1">
+                  <Bell className={`w-4 h-4 ${isRemindersActive ? 'text-coral' : 'text-teal'}`} />
+                  <span className="text-sm text-gray-600">
+                    {event.reminders?.length || 0} reminder{event.reminders?.length === 1 ? '' : 's'} set
+                  </span>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        
-        {/* Action buttons positioned absolutely at top-right */}
-        <div className="absolute top-4 right-4 flex flex-col space-y-1">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={(e) => {
-              e.stopPropagation();
-              setShowMessageModal(true);
-            }}
-            className="text-gray-400 hover:text-purple-500 p-2 h-8 w-8"
-            title="Generate Message"
-          >
-            <Sparkles className="w-4 h-4" />
-          </Button>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={(e) => {
-              e.stopPropagation();
-              onEdit(event);
-            }}
-            className="text-gray-400 hover:text-teal p-2 h-8 w-8"
-            title="Edit Event"
-          >
-            <Edit className="w-4 h-4" />
-          </Button>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={(e) => {
-              e.stopPropagation();
-              onDelete(event.id);
-            }}
-            className="text-gray-400 hover:text-red-500 p-2 h-8 w-8"
-            title="Delete Event"
-          >
-            <Trash2 className="w-4 h-4" />
-          </Button>
-        </div>
-      </CardContent>
-    </Card>
-    
-    <MessageGeneratorModal
-      open={showMessageModal}
-      onOpenChange={setShowMessageModal}
-      event={event}
-    />
+          
+          {/* Action buttons positioned absolutely at top-right */}
+          <div className="absolute top-4 right-4 flex flex-col space-y-1">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowMessageModal(true);
+              }}
+              className="text-gray-400 hover:text-purple-500 p-2 h-8 w-8"
+              title="Generate Message"
+            >
+              <Sparkles className="w-4 h-4" />
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={(e) => {
+                e.stopPropagation();
+                onEdit(event);
+              }}
+              className="text-gray-400 hover:text-teal p-2 h-8 w-8"
+              title="Edit Event"
+            >
+              <Edit className="w-4 h-4" />
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={(e) => {
+                e.stopPropagation();
+                onDelete(event.id);
+              }}
+              className="text-gray-400 hover:text-red-500 p-2 h-8 w-8"
+              title="Delete Event"
+            >
+              <Trash2 className="w-4 h-4" />
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+      <MessageGeneratorModal
+        open={showMessageModal}
+        onOpenChange={setShowMessageModal}
+        event={event}
+      />
     </>
   );
 }
