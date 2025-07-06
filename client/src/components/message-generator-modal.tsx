@@ -29,13 +29,36 @@ export function MessageGeneratorModal({ open, onOpenChange, event }: MessageGene
 
   // Fetch existing message for the event
   const { data: existingMessage, isLoading: isLoadingMessage } = useQuery<GeneratedMessage>({
-    queryKey: ["/api/events", event?.id, "message"],
+    queryKey: [`/api/events/${event?.id}/message`],
+    queryFn: async () => {
+      if (!event) return null;
+      
+      const response = await fetch(`/api/events/${event.id}/message`, {
+        credentials: "include",
+      });
+      
+      console.log(`Fetching message for event ${event.id}, status: ${response.status}`);
+      
+      if (response.status === 404) {
+        console.log("No message found for this event");
+        return null; // No message exists yet
+      }
+      
+      if (!response.ok) {
+        throw new Error(`Failed to fetch message: ${response.status}`);
+      }
+      
+      const result = await response.json();
+      console.log("Message fetch result:", result);
+      return result;
+    },
     enabled: !!event && open,
     retry: false, // Don't retry if no message exists (404)
   });
 
   // Update the displayed message when existing message is loaded
   useEffect(() => {
+    console.log("Existing message:", existingMessage);
     if (existingMessage) {
       setGeneratedMessage(existingMessage);
       setTone(existingMessage.tone);
