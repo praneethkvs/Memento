@@ -3,14 +3,28 @@ import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { EventCard } from "@/components/event-card";
 import { AddEventModal } from "@/components/add-event-modal";
 import { EditEventModal } from "@/components/edit-event-modal";
 import { DeleteConfirmationModal } from "@/components/delete-confirmation-modal";
 import { EventDetailsModal } from "@/components/event-details-modal";
 import { MiniCalendar } from "@/components/mini-calendar";
-import { CalendarHeart, Plus, Search, CalendarDays, Calendar, List, LogOut } from "lucide-react";
+import {
+  CalendarHeart,
+  Plus,
+  Search,
+  CalendarDays,
+  Calendar,
+  List,
+  LogOut,
+} from "lucide-react";
 import { Event } from "@shared/schema";
 import { useAuth } from "@/hooks/useAuth";
 import { isUnauthorizedError } from "@/lib/authUtils";
@@ -26,10 +40,10 @@ export default function Home() {
   const [editingEvent, setEditingEvent] = useState<Event | null>(null);
   const [viewingEvent, setViewingEvent] = useState<Event | null>(null);
   const [deletingEventId, setDeletingEventId] = useState<number | null>(null);
-  const [deletingEventName, setDeletingEventName] = useState('');
-  const [searchQuery, setSearchQuery] = useState('');
-  const [typeFilter, setTypeFilter] = useState('all');
-  const [relationFilter, setRelationFilter] = useState('all');
+  const [deletingEventName, setDeletingEventName] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [typeFilter, setTypeFilter] = useState("all");
+  const [relationFilter, setRelationFilter] = useState("all");
 
   // Redirect to login if not authenticated
   useEffect(() => {
@@ -48,26 +62,26 @@ export default function Home() {
 
   // Build query parameters
   const queryParams = new URLSearchParams();
-  if (searchQuery) queryParams.append('search', searchQuery);
-  if (typeFilter !== 'all') queryParams.append('type', typeFilter);
-  if (relationFilter !== 'all') queryParams.append('relation', relationFilter);
+  if (searchQuery) queryParams.append("search", searchQuery);
+  if (typeFilter !== "all") queryParams.append("type", typeFilter);
+  if (relationFilter !== "all") queryParams.append("relation", relationFilter);
 
   const { data: events = [], isLoading: isLoadingEvents } = useQuery<Event[]>({
-    queryKey: ['/api/events', queryParams.toString()],
+    queryKey: ["/api/events", queryParams.toString()],
     queryFn: async () => {
       const response = await fetch(`/api/events?${queryParams.toString()}`);
-      if (!response.ok) throw new Error('Failed to fetch events');
+      if (!response.ok) throw new Error("Failed to fetch events");
       return response.json();
-    }
+    },
   });
 
   const { data: stats } = useQuery({
-    queryKey: ['/api/events/stats'],
+    queryKey: ["/api/events/stats"],
     queryFn: async () => {
-      const response = await fetch('/api/events/stats');
-      if (!response.ok) throw new Error('Failed to fetch stats');
+      const response = await fetch("/api/events/stats");
+      if (!response.ok) throw new Error("Failed to fetch stats");
       return response.json();
-    }
+    },
   });
 
   const handleEdit = (event: Event) => {
@@ -81,7 +95,7 @@ export default function Home() {
   };
 
   const handleDelete = (id: number) => {
-    const event = events.find(e => e.id === id);
+    const event = events.find((e) => e.id === id);
     if (event) {
       setDeletingEventId(id);
       setDeletingEventName(event.personName);
@@ -123,7 +137,9 @@ export default function Home() {
                 <CalendarHeart className="text-white text-xl" />
               </div>
               <div>
-                <h1 className="text-xl font-semibold text-dark-grey">Memento</h1>
+                <h1 className="text-xl font-semibold text-dark-grey">
+                  Memento
+                </h1>
                 <p className="text-sm text-gray-600">Remember what matters!</p>
               </div>
             </div>
@@ -136,7 +152,7 @@ export default function Home() {
                 <span className="hidden sm:inline">Add Event</span>
               </Button>
               <Button
-                onClick={() => window.location.href = '/api/logout'}
+                onClick={() => (window.location.href = "/api/logout")}
                 variant="outline"
                 className="min-h-[44px] flex items-center space-x-2"
               >
@@ -161,7 +177,7 @@ export default function Home() {
                 </div>
                 <span className="text-xs text-gray-600">This Week</span>
               </div>
-              
+
               <div className="flex items-center gap-2">
                 <div className="w-10 h-10 rounded-full flex items-center justify-center bg-[#5abff2e6]">
                   <span className="text-white font-semibold text-[20px]">
@@ -170,7 +186,7 @@ export default function Home() {
                 </div>
                 <span className="text-xs text-gray-600">This Month</span>
               </div>
-              
+
               <div className="flex items-center gap-2">
                 <div className="w-10 h-10 rounded-full flex items-center justify-center bg-[#5abff2]">
                   <span className="text-white font-semibold text-[20px]">
@@ -202,11 +218,16 @@ export default function Home() {
                       <SelectContent>
                         <SelectItem value="all">All Types</SelectItem>
                         <SelectItem value="birthday">Birthdays</SelectItem>
-                        <SelectItem value="anniversary">Anniversaries</SelectItem>
+                        <SelectItem value="anniversary">
+                          Anniversaries
+                        </SelectItem>
                         <SelectItem value="other">Other</SelectItem>
                       </SelectContent>
                     </Select>
-                    <Select value={relationFilter} onValueChange={handleRelationFilter}>
+                    <Select
+                      value={relationFilter}
+                      onValueChange={handleRelationFilter}
+                    >
                       <SelectTrigger className="min-w-[120px]">
                         <SelectValue placeholder="All Relations" />
                       </SelectTrigger>
@@ -227,18 +248,24 @@ export default function Home() {
             {/* Events List */}
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <h2 className="text-xl font-semibold text-dark-grey">Upcoming Events</h2>
+                <h2 className="text-xl font-semibold text-dark-grey">
+                  Upcoming Events
+                </h2>
               </div>
 
               {events.length === 0 ? (
                 <Card>
                   <CardContent className="p-12 text-center">
                     <CalendarHeart className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                    <h3 className="text-lg font-medium text-gray-900 mb-2">No events found</h3>
+                    <h3 className="text-lg font-medium text-gray-900 mb-2">
+                      No events found
+                    </h3>
                     <p className="text-gray-600 mb-4">
-                      {searchQuery || typeFilter !== 'all' || relationFilter !== 'all'
-                        ? 'Try adjusting your search or filters'
-                        : 'Get started by adding your first event'}
+                      {searchQuery ||
+                      typeFilter !== "all" ||
+                      relationFilter !== "all"
+                        ? "Try adjusting your search or filters"
+                        : "Get started by adding your first event"}
                     </p>
                     <Button
                       onClick={() => setShowAddModal(true)}
@@ -268,12 +295,12 @@ export default function Home() {
             {/* Calendar Widget */}
             <MiniCalendar events={events} />
 
-
-
             {/* Event Categories */}
             <Card className="mt-6">
               <CardContent className="p-6">
-                <h3 className="font-semibold text-dark-grey mb-4">Event Categories</h3>
+                <h3 className="font-semibold text-dark-grey mb-4">
+                  Event Categories
+                </h3>
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-3">
@@ -287,7 +314,9 @@ export default function Home() {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-3">
                       <div className="w-3 h-3 bg-teal rounded-full"></div>
-                      <span className="text-sm text-dark-grey">Anniversaries</span>
+                      <span className="text-sm text-dark-grey">
+                        Anniversaries
+                      </span>
                     </div>
                     <span className="text-sm text-gray-500">
                       {stats?.anniversaryCount || 0}
@@ -309,10 +338,7 @@ export default function Home() {
         </div>
       </main>
       {/* Modals */}
-      <AddEventModal
-        open={showAddModal}
-        onOpenChange={setShowAddModal}
-      />
+      <AddEventModal open={showAddModal} onOpenChange={setShowAddModal} />
       <EditEventModal
         open={showEditModal}
         onOpenChange={setShowEditModal}
