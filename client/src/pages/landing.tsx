@@ -54,7 +54,7 @@ export default function Landing() {
                 <Badge variant="outline" className="bg-white/50">🎉 Special Occasions</Badge>
                 <Badge variant="outline" className="bg-white/50">📝 Custom Tone & Length</Badge>
               </div>
-              <div className="bg-white/70 rounded-lg p-6 max-w-lg mx-auto ml-[-24px] mr-[-24px]">
+              <div className="bg-white/70 rounded-lg p-6 max-w-lg mx-auto ml-[0px] mr-[0px]">
                 <div className="flex items-start gap-3">
                   <MessageCircle className="w-5 h-5 text-purple-500 mt-1 flex-shrink-0" />
                   <div className="text-left">
