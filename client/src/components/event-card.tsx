@@ -132,7 +132,7 @@ export function EventCard({ event, onEdit, onDelete, onClick }: EventCardProps) 
               <p className="text-sm text-gray-600 mb-2">{nextOccurrenceDate}</p>
               <div className="space-y-1">
                 <div className="flex items-center space-x-2">
-                  <Clock className="w-4 h-4 text-soft-yellow" />
+                  <Clock className="w-4 h-4 text-gray-500 dark:text-gray-400" />
                   <Badge variant="secondary" className={urgencyStyles.badgeClass}>
                     {daysUntil === 0 ? 'Today!' : `${daysUntil} day${daysUntil === 1 ? '' : 's'} away`}
                   </Badge>
