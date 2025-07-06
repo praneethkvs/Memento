@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Edit, Trash2, Calendar, Clock, Bell, Sparkles } from "lucide-react";
 import { Event } from "@shared/schema";
 import { 
@@ -116,44 +117,66 @@ export function EventCard({ event, onEdit, onDelete, onClick }: EventCardProps) 
           </div>
           
           {/* Action buttons positioned absolutely at top-right */}
-          <div className="absolute top-4 right-4 flex flex-col space-y-1 ml-[-8px] mr-[-8px]">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={(e) => {
-                e.stopPropagation();
-                setShowMessageModal(true);
-              }}
-              className="text-gray-400 hover:text-purple-500 p-2 h-8 w-8"
-              title="Generate Message"
-            >
-              <Sparkles className="w-4 h-4" />
-            </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={(e) => {
-                e.stopPropagation();
-                onEdit(event);
-              }}
-              className="text-gray-400 hover:text-teal p-2 h-8 w-8"
-              title="Edit Event"
-            >
-              <Edit className="w-4 h-4" />
-            </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={(e) => {
-                e.stopPropagation();
-                onDelete(event.id);
-              }}
-              className="text-gray-400 hover:text-red-500 p-2 h-8 w-8"
-              title="Delete Event"
-            >
-              <Trash2 className="w-4 h-4" />
-            </Button>
-          </div>
+          <TooltipProvider>
+            <div className="absolute top-4 right-4 flex flex-col space-y-1 ml-[-8px] mr-[-8px]">
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setShowMessageModal(true);
+                    }}
+                    className="text-gray-400 hover:text-purple-500 p-2 h-8 w-8"
+                  >
+                    <Sparkles className="w-4 h-4" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent side="left">
+                  <p>Generate Personalized Message</p>
+                </TooltipContent>
+              </Tooltip>
+              
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onEdit(event);
+                    }}
+                    className="text-gray-400 hover:text-teal p-2 h-8 w-8"
+                  >
+                    <Edit className="w-4 h-4" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent side="left">
+                  <p>Edit Event</p>
+                </TooltipContent>
+              </Tooltip>
+              
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onDelete(event.id);
+                    }}
+                    className="text-gray-400 hover:text-red-500 p-2 h-8 w-8"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent side="left">
+                  <p>Delete Event</p>
+                </TooltipContent>
+              </Tooltip>
+            </div>
+          </TooltipProvider>
         </CardContent>
       </Card>
       <MessageGeneratorModal
