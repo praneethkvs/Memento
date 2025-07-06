@@ -54,12 +54,15 @@ export default function Landing() {
                 <Badge variant="outline" className="bg-white/50">🎉 Special Occasions</Badge>
                 <Badge variant="outline" className="bg-white/50">📝 Custom Tone & Length</Badge>
               </div>
-              <div className="bg-white/70 rounded-lg p-6 max-w-lg mx-auto ml-[0px] mr-[0px]">
+              <div className="bg-white/70 rounded-lg p-6 max-w-lg mx-auto">
                 <div className="flex items-start gap-3">
                   <MessageCircle className="w-5 h-5 text-purple-500 mt-1 flex-shrink-0" />
                   <div className="text-left">
                     <p className="text-sm font-medium text-gray-800 mb-1">AI Generated Message:</p>
-                    <p className="text-sm text-gray-600 italic">"Happy birthday Sara! 🎉 Hope your special day is filled with joy, laughter, and all your favorite things. Can't wait to celebrate with you!"</p>
+                    <p className="text-sm text-gray-600 italic">
+                      "Happy birthday Sarah! 🎉 Hope your special day is filled with joy, laughter, 
+                      and all your favorite things. Can't wait to celebrate with you!"
+                    </p>
                   </div>
                 </div>
               </div>
@@ -137,12 +140,15 @@ export default function Landing() {
                 <Badge variant="outline" className="bg-white/50">🛍️ Shopping Links</Badge>
                 <Badge variant="outline" className="bg-white/50">⭐ Trending Ideas</Badge>
               </div>
-              <div className="bg-white/70 rounded-lg p-6 max-w-lg mx-auto ml-[0px] mr-[0px]">
+              <div className="bg-white/70 rounded-lg p-6 max-w-lg mx-auto">
                 <div className="flex items-start gap-3">
                   <Gift className="w-5 h-5 text-emerald-500 mt-1 flex-shrink-0" />
                   <div className="text-left">
                     <p className="text-sm font-medium text-gray-800 mb-1">AI Gift Suggestion Preview:</p>
-                    <p className="text-sm text-gray-600 italic">"Based on Sara's love for reading and coffee, consider a beautiful book journal paired with artisanal coffee beans - perfect for her cozy morning routine!"</p>
+                    <p className="text-sm text-gray-600 italic">
+                      "Based on Sarah's love for reading and coffee, consider a beautiful book journal 
+                      paired with artisanal coffee beans - perfect for her cozy morning routine!"
+                    </p>
                   </div>
                 </div>
               </div>
