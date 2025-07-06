@@ -116,7 +116,7 @@ export function EventCard({ event, onEdit, onDelete, onClick }: EventCardProps) 
           </div>
           
           {/* Action buttons positioned absolutely at top-right */}
-          <div className="absolute top-4 right-4 flex flex-col space-y-1">
+          <div className="absolute top-4 right-4 flex flex-col space-y-1 ml-[-8px] mr-[-8px]">
             <Button
               variant="ghost"
               size="sm"
