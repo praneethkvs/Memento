@@ -137,7 +137,7 @@ export default function Landing() {
                 <Badge variant="outline" className="bg-white/50">🛍️ Shopping Links</Badge>
                 <Badge variant="outline" className="bg-white/50">⭐ Trending Ideas</Badge>
               </div>
-              <div className="bg-white/70 rounded-lg p-6 max-w-lg mx-auto">
+              <div className="bg-white/70 rounded-lg p-6 max-w-lg mx-auto ml-[-24px] mr-[-24px]">
                 <div className="flex items-start gap-3">
                   <Gift className="w-5 h-5 text-emerald-500 mt-1 flex-shrink-0" />
                   <div className="text-left">
