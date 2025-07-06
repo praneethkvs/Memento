@@ -2,8 +2,10 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { Calendar, Clock, Bell, User, Type, Heart, StickyNote, Edit } from "lucide-react";
+import { Calendar, Clock, Bell, User, Type, Heart, StickyNote, Edit, Copy, MessageCircle } from "lucide-react";
 import { Event } from "@shared/schema";
+import { useQuery } from "@tanstack/react-query";
+import { useToast } from "@/hooks/use-toast";
 import { 
   formatNextOccurrence, 
   getDaysUntilNextOccurrence, 
@@ -18,7 +20,60 @@ interface EventDetailsModalProps {
   onEdit?: (event: Event) => void;
 }
 
+interface GeneratedMessage {
+  id: number;
+  eventId: number;
+  userId: string;
+  message: string;
+  tone: string;
+  length: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export function EventDetailsModal({ open, onOpenChange, event, onEdit }: EventDetailsModalProps) {
+  const { toast } = useToast();
+  
+  // Fetch existing message for the event
+  const { data: existingMessage, isLoading: isLoadingMessage } = useQuery<GeneratedMessage>({
+    queryKey: [`/api/events/${event?.id}/message`],
+    queryFn: async () => {
+      if (!event) return null;
+      
+      const response = await fetch(`/api/events/${event.id}/message`, {
+        credentials: "include",
+      });
+      
+      if (response.status === 404) {
+        return null; // No message exists yet
+      }
+      
+      if (!response.ok) {
+        throw new Error(`Failed to fetch message: ${response.status}`);
+      }
+      
+      return response.json();
+    },
+    enabled: !!event && open,
+    retry: false,
+  });
+
+  const copyToClipboard = async (text: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      toast({
+        title: "Copied to clipboard",
+        description: "The message has been copied to your clipboard.",
+      });
+    } catch (err) {
+      toast({
+        title: "Copy failed",
+        description: "Could not copy the message to clipboard.",
+        variant: "destructive",
+      });
+    }
+  };
+
   if (!event) return null;
 
   const getEventIcon = (type: string) => {
@@ -160,6 +215,35 @@ export function EventDetailsModal({ open, onOpenChange, event, onEdit }: EventDe
               </>
             )}
           </div>
+
+          {/* Generated Message Section */}
+          {existingMessage && (
+            <>
+              <Separator />
+              <div className="space-y-3">
+                <div className="flex items-center space-x-2">
+                  <MessageCircle className="w-5 h-5 text-gray-500" />
+                  <h3 className="text-sm font-medium">Generated Message</h3>
+                  <Badge variant="outline" className="text-xs">
+                    {existingMessage.tone} • {existingMessage.length}
+                  </Badge>
+                </div>
+                
+                <div className="bg-gray-50 p-4 rounded-lg">
+                  <p className="text-sm text-gray-700 mb-3">{existingMessage.message}</p>
+                  <Button
+                    onClick={() => copyToClipboard(existingMessage.message)}
+                    variant="outline"
+                    size="sm"
+                    className="w-full"
+                  >
+                    <Copy className="w-4 h-4 mr-2" />
+                    Copy Message
+                  </Button>
+                </div>
+              </div>
+            </>
+          )}
 
           <Separator />
 
