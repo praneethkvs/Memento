@@ -1,10 +1,13 @@
 import {
   users,
   events,
+  eventMessages,
   type User,
   type UpsertUser,
   type Event,
   type InsertEvent,
+  type EventMessage,
+  type InsertEventMessage,
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, and, like, or } from "drizzle-orm";
@@ -24,6 +27,12 @@ export interface IStorage {
   deleteEvent(id: number, userId: string): Promise<boolean>;
   searchEvents(query: string, userId: string): Promise<Event[]>;
   filterEvents(type?: string, relation?: string, userId?: string): Promise<Event[]>;
+  
+  // Message operations
+  getEventMessage(eventId: number, userId: string): Promise<EventMessage | undefined>;
+  createEventMessage(eventId: number, message: InsertEventMessage, userId: string): Promise<EventMessage>;
+  updateEventMessage(eventId: number, message: Partial<InsertEventMessage>, userId: string): Promise<EventMessage | undefined>;
+  deleteEventMessage(eventId: number, userId: string): Promise<boolean>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -128,6 +137,60 @@ export class DatabaseStorage implements IStorage {
       .from(events)
       .where(and(...conditions))
       .orderBy(events.monthDay);
+  }
+
+  // Message operations
+  async getEventMessage(eventId: number, userId: string): Promise<EventMessage | undefined> {
+    const [message] = await db
+      .select()
+      .from(eventMessages)
+      .where(and(
+        eq(eventMessages.eventId, eventId),
+        eq(eventMessages.userId, userId)
+      ))
+      .orderBy(eventMessages.createdAt);
+    
+    return message;
+  }
+
+  async createEventMessage(eventId: number, messageData: InsertEventMessage, userId: string): Promise<EventMessage> {
+    const [message] = await db
+      .insert(eventMessages)
+      .values({
+        eventId,
+        userId,
+        ...messageData,
+      })
+      .returning();
+    
+    return message;
+  }
+
+  async updateEventMessage(eventId: number, messageData: Partial<InsertEventMessage>, userId: string): Promise<EventMessage | undefined> {
+    const [message] = await db
+      .update(eventMessages)
+      .set({
+        ...messageData,
+        updatedAt: new Date(),
+      })
+      .where(and(
+        eq(eventMessages.eventId, eventId),
+        eq(eventMessages.userId, userId)
+      ))
+      .returning();
+    
+    return message;
+  }
+
+  async deleteEventMessage(eventId: number, userId: string): Promise<boolean> {
+    const result = await db
+      .delete(eventMessages)
+      .where(and(
+        eq(eventMessages.eventId, eventId),
+        eq(eventMessages.userId, userId)
+      ));
+    
+    return (result.rowCount || 0) > 0;
   }
 }
 

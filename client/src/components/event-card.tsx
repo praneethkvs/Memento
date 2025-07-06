@@ -1,7 +1,8 @@
+import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Edit, Trash2, Calendar, Clock, Bell } from "lucide-react";
+import { Edit, Trash2, Calendar, Clock, Bell, Sparkles } from "lucide-react";
 import { Event } from "@shared/schema";
 import { 
   formatNextOccurrence, 
@@ -9,6 +10,7 @@ import {
   calculateAge,
   shouldShowReminder 
 } from "@/lib/date-utils";
+import { MessageGeneratorModal } from "./message-generator-modal";
 
 interface EventCardProps {
   event: Event;
@@ -18,6 +20,7 @@ interface EventCardProps {
 }
 
 export function EventCard({ event, onEdit, onDelete, onClick }: EventCardProps) {
+  const [showMessageModal, setShowMessageModal] = useState(false);
   const getEventIcon = (type: string) => {
     if (type === 'birthday') return '🎂';
     if (type === 'anniversary') return '💝';
@@ -74,6 +77,7 @@ export function EventCard({ event, onEdit, onDelete, onClick }: EventCardProps) 
   };
 
   return (
+    <>
     <Card 
       className={`hover:shadow-md transition-shadow ${onClick ? 'cursor-pointer' : ''}`}
       onClick={onClick ? () => onClick(event) : undefined}
@@ -117,6 +121,18 @@ export function EventCard({ event, onEdit, onDelete, onClick }: EventCardProps) 
               size="sm"
               onClick={(e) => {
                 e.stopPropagation();
+                setShowMessageModal(true);
+              }}
+              className="text-gray-400 hover:text-purple-500"
+              title="Generate Message"
+            >
+              <Sparkles className="w-4 h-4" />
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={(e) => {
+                e.stopPropagation();
                 onEdit(event);
               }}
               className="text-gray-400 hover:text-teal"
@@ -138,5 +154,12 @@ export function EventCard({ event, onEdit, onDelete, onClick }: EventCardProps) 
         </div>
       </CardContent>
     </Card>
+    
+    <MessageGeneratorModal
+      open={showMessageModal}
+      onOpenChange={setShowMessageModal}
+      event={event}
+    />
+    </>
   );
 }

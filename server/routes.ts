@@ -1,10 +1,11 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertEventSchema } from "@shared/schema";
+import { insertEventSchema, insertEventMessageSchema } from "@shared/schema";
 import { z } from "zod";
 import { getNextOccurrence } from "./date-utils";
 import { setupAuth, isAuthenticated } from "./replitAuth";
+import { generateGreetingMessage } from "./gemini";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Auth middleware
@@ -151,6 +152,112 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json({ message: "Event deleted successfully" });
     } catch (error) {
       res.status(500).json({ message: "Failed to delete event" });
+    }
+  });
+
+  // Message generation routes
+  
+  // Generate message for event
+  app.post("/api/events/:id/generate-message", isAuthenticated, async (req: any, res) => {
+    try {
+      const eventId = parseInt(req.params.id);
+      const userId = req.user.claims.sub;
+      const { tone, length } = req.body;
+      
+      // Validate tone and length
+      const messageSchema = z.object({
+        tone: z.enum(['cheerful', 'heartfelt', 'funny', 'formal']),
+        length: z.enum(['short', 'medium', 'long'])
+      });
+      
+      const validatedData = messageSchema.parse({ tone, length });
+      
+      // Get the event
+      const event = await storage.getEvent(eventId, userId);
+      if (!event) {
+        return res.status(404).json({ message: "Event not found" });
+      }
+      
+      // Calculate age for the message
+      let age = null;
+      if (event.hasYear && event.eventYear) {
+        const currentYear = new Date().getFullYear();
+        if (event.eventType === 'birthday') {
+          age = currentYear - event.eventYear;
+        } else if (event.eventType === 'anniversary') {
+          age = currentYear - event.eventYear + 1; // +1 because first anniversary is year 1
+        }
+      }
+      
+      // Generate the message using Gemini
+      const generatedMessage = await generateGreetingMessage(
+        event.personName,
+        event.eventType,
+        event.relation,
+        age,
+        validatedData.tone,
+        validatedData.length
+      );
+      
+      // Store or update the message
+      const existingMessage = await storage.getEventMessage(eventId, userId);
+      let savedMessage;
+      
+      if (existingMessage) {
+        savedMessage = await storage.updateEventMessage(eventId, {
+          message: generatedMessage,
+          tone: validatedData.tone,
+          length: validatedData.length
+        }, userId);
+      } else {
+        savedMessage = await storage.createEventMessage(eventId, {
+          message: generatedMessage,
+          tone: validatedData.tone,
+          length: validatedData.length
+        }, userId);
+      }
+      
+      res.json(savedMessage);
+    } catch (error) {
+      console.error('Error generating message:', error);
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Invalid message options", errors: error.errors });
+      }
+      res.status(500).json({ message: "Failed to generate message" });
+    }
+  });
+  
+  // Get message for event
+  app.get("/api/events/:id/message", isAuthenticated, async (req: any, res) => {
+    try {
+      const eventId = parseInt(req.params.id);
+      const userId = req.user.claims.sub;
+      
+      const message = await storage.getEventMessage(eventId, userId);
+      if (!message) {
+        return res.status(404).json({ message: "Message not found" });
+      }
+      
+      res.json(message);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch message" });
+    }
+  });
+  
+  // Delete message for event
+  app.delete("/api/events/:id/message", isAuthenticated, async (req: any, res) => {
+    try {
+      const eventId = parseInt(req.params.id);
+      const userId = req.user.claims.sub;
+      
+      const success = await storage.deleteEventMessage(eventId, userId);
+      if (!success) {
+        return res.status(404).json({ message: "Message not found" });
+      }
+      
+      res.json({ message: "Message deleted successfully" });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to delete message" });
     }
   });
 

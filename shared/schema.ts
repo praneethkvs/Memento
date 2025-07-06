@@ -51,6 +51,17 @@ export const events = pgTable("events", {
   reminders: text("reminders").array(), // Array of reminder days like ['30', '15', '7', '3', '1']
 });
 
+export const eventMessages = pgTable("event_messages", {
+  id: serial("id").primaryKey(),
+  eventId: integer("event_id").notNull().references(() => events.id, { onDelete: "cascade" }),
+  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  message: text("message").notNull(),
+  tone: text("tone").notNull(), // 'cheerful', 'heartfelt', 'funny', 'formal'
+  length: text("length").notNull(), // 'short', 'medium', 'long'
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
 export const insertEventSchema = createInsertSchema(events).pick({
   personName: true,
   eventType: true,
@@ -69,7 +80,18 @@ export const insertEventSchema = createInsertSchema(events).pick({
   eventYear: z.number().optional(),
 });
 
+export const insertEventMessageSchema = createInsertSchema(eventMessages).pick({
+  message: true,
+  tone: true,
+  length: true,
+}).extend({
+  tone: z.enum(['cheerful', 'heartfelt', 'funny', 'formal']),
+  length: z.enum(['short', 'medium', 'long']),
+});
+
 export type UpsertUser = typeof users.$inferInsert;
 export type User = typeof users.$inferSelect;
 export type InsertEvent = z.infer<typeof insertEventSchema>;
 export type Event = typeof events.$inferSelect;
+export type InsertEventMessage = z.infer<typeof insertEventMessageSchema>;
+export type EventMessage = typeof eventMessages.$inferSelect;
