@@ -120,6 +120,7 @@ Changelog:
 - July 06, 2025. Fixed cache synchronization between modals for real-time message updates
 - July 06, 2025. Updated event sorting to prioritize upcoming events (days until next occurrence)
 - July 06, 2025. Implemented timezone-aware client-side sorting for global users
+- July 06, 2025. Fixed statistics bug where today's events weren't counted in "This Week" and "This Month"
 ```
 
 ## User Preferences

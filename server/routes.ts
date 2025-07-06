@@ -51,20 +51,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const events = await storage.getAllEvents(userId);
       const now = new Date();
       
-      const thisWeekEnd = new Date(now);
-      thisWeekEnd.setDate(now.getDate() + 7);
+      // Set to start of day for accurate date comparisons
+      const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
       
-      const thisMonthEnd = new Date(now);
-      thisMonthEnd.setMonth(now.getMonth() + 1);
+      const thisWeekEnd = new Date(todayStart);
+      thisWeekEnd.setDate(todayStart.getDate() + 7);
+      
+      const thisMonthEnd = new Date(todayStart);
+      thisMonthEnd.setMonth(todayStart.getMonth() + 1);
       
       const upcomingThisWeek = events.filter(event => {
         const nextOccurrence = getNextOccurrence(event.monthDay);
-        return nextOccurrence >= now && nextOccurrence <= thisWeekEnd;
+        // Set to start of day for consistent comparison
+        const nextStart = new Date(nextOccurrence.getFullYear(), nextOccurrence.getMonth(), nextOccurrence.getDate());
+        return nextStart >= todayStart && nextStart < thisWeekEnd;
       }).length;
       
       const upcomingThisMonth = events.filter(event => {
         const nextOccurrence = getNextOccurrence(event.monthDay);
-        return nextOccurrence >= now && nextOccurrence <= thisMonthEnd;
+        // Set to start of day for consistent comparison
+        const nextStart = new Date(nextOccurrence.getFullYear(), nextOccurrence.getMonth(), nextOccurrence.getDate());
+        return nextStart >= todayStart && nextStart < thisMonthEnd;
       }).length;
       
       const totalEvents = events.length;
