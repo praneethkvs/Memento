@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -27,6 +27,26 @@ export function MessageGeneratorModal({ open, onOpenChange, event }: MessageGene
   const [generatedMessage, setGeneratedMessage] = useState<GeneratedMessage | null>(null);
   const { toast } = useToast();
 
+  // Fetch existing message for the event
+  const { data: existingMessage, isLoading: isLoadingMessage } = useQuery<GeneratedMessage>({
+    queryKey: ["/api/events", event?.id, "message"],
+    enabled: !!event && open,
+    retry: false, // Don't retry if no message exists (404)
+  });
+
+  // Update the displayed message when existing message is loaded
+  useEffect(() => {
+    if (existingMessage) {
+      setGeneratedMessage(existingMessage);
+      setTone(existingMessage.tone);
+      setLength(existingMessage.length);
+    } else {
+      setGeneratedMessage(null);
+    }
+  }, [existingMessage]);
+
+  const queryClient = useQueryClient();
+
   // Generate message mutation
   const generateMutation = useMutation({
     mutationFn: async () => {
@@ -48,6 +68,8 @@ export function MessageGeneratorModal({ open, onOpenChange, event }: MessageGene
     },
     onSuccess: (data) => {
       setGeneratedMessage(data);
+      // Invalidate the query to refetch the latest message
+      queryClient.invalidateQueries({ queryKey: ["/api/events", event?.id, "message"] });
       toast({
         title: "Message Generated",
         description: "Your personalized message has been created!",

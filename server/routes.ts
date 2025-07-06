@@ -157,6 +157,24 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Message generation routes
   
+  // Get existing message for event
+  app.get("/api/events/:id/message", isAuthenticated, async (req: any, res) => {
+    try {
+      const eventId = parseInt(req.params.id);
+      const userId = req.user.claims.sub;
+      
+      const message = await storage.getEventMessage(eventId, userId);
+      if (message) {
+        res.json(message);
+      } else {
+        res.status(404).json({ message: "No message found" });
+      }
+    } catch (error) {
+      console.error("Error fetching message:", error);
+      res.status(500).json({ message: "Failed to fetch message" });
+    }
+  });
+  
   // Generate message for event
   app.post("/api/events/:id/generate-message", isAuthenticated, async (req: any, res) => {
     try {
