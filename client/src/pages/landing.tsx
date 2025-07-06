@@ -59,10 +59,7 @@ export default function Landing() {
                   <MessageCircle className="w-5 h-5 text-purple-500 mt-1 flex-shrink-0" />
                   <div className="text-left">
                     <p className="text-sm font-medium text-gray-800 mb-1">AI Generated Message:</p>
-                    <p className="text-sm text-gray-600 italic">
-                      "Happy birthday Sarah! 🎉 Hope your special day is filled with joy, laughter, 
-                      and all your favorite things. Can't wait to celebrate with you!"
-                    </p>
+                    <p className="text-sm text-gray-600 italic">"Happy birthday Sara! 🎉 Hope your special day is filled with joy, laughter, and all your favorite things. Can't wait to celebrate with you!"</p>
                   </div>
                 </div>
               </div>
